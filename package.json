@@ -1,0 +1,17 @@
+{
+  "name": "core-form-js",
+  "version": "0.0.0",
+  "description": "CoreFormJs",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "grunt": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-terser": "^1.0.0",
+    "grunt-sass": "^3.1.0",
+    "node-sass": "^4.14.0"
+  }
+}

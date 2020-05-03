@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>VueJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="/builder/css/uikit.min.css" />
+    <link rel="stylesheet" href="/builder/css/select2.css" />
+    <link rel="stylesheet" href="/builder/css/quill.core.css">
+    <link rel="stylesheet" href="/builder/css/quill.snow.css">
+    <link rel="stylesheet" href="/builder/css/quill.bubble.css">
+    <link rel="stylesheet" href="/builder/css/daterangepicker.css">
+    <link rel="stylesheet" href="/builder/css/styles.css" />
+    <link rel="stylesheet" href="/builder/css/style_builder.css" />
+
+    <style>
+    </style>
+
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/jquery.js"></script>
+
+    <script src="/builder/js/vuelidate.min.js"></script>
+    <script src="/builder/js/validators.min.js"></script>
+    <script src="/builder/js/uikit.min.js"></script>
+    <script src="/builder/js/uikit-icons.min.js"></script>
+    <script src="/builder/js/select2.js"></script>
+    <script src="/builder/js/quill.min.js"></script>
+    <script src="/builder/js/moment.min.js"></script>
+    <script src="/builder/js/daterangepicker.js"></script>
+    <script src="/builder/js/sortable.min.js"></script>
+    <script src="/builder/js/script_common.js"></script>
+    <script src="/builder/js/editfieldmodal.js"></script>
+    <script src="/builder/js/component_builder_helpers.js"></script>
+    <script src="/builder/js/components.js"></script>
+    <script src="/builder/js/script_builder.js"></script>
+</head>
+<body>
+
+    [<a href="/"><< Back</a>]
+
+    <div id="app">
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            coreform.formBuilder("#app", {
+                dataSourceList() {
+                    return [{
+                        id: '12345678',
+                        label: 'Countries',
+                        queryable: true
+                    }];
+                },
+                dataSource: function (id, onSuccess, query) {
+                    $.ajax({
+                        url: "/Data/" + schemaId + "/" + query,
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                           onSuccess(data);
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>
