@@ -438,6 +438,7 @@ RegisterField({
         if (!model.label) model.label = '';
         if (!model.variable) model.variable = '';
         if (!model.placeholder) model.placeholder = '';
+        if (!model.source) model.source = {minimumInputLength:3};
         if ((typeof (model.multiple) === 'undefined')) model.multiple = false;
         return model;
     },
@@ -445,7 +446,7 @@ RegisterField({
         template:
             `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label>
                 <div class="uk-form-control bt-select-field" v-bind:class="{'uk-form-danger': this.$error}">
-	                <select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
+	                <select @change="changeValue" :multiple="schema.multiple" class="bt-select-field no-autoinit" v-model="schema.id" :id="schema.id" :name="schema.id">
 	                </select>
                 </div>
                 <div class="error-message">{{this.$errorMessage}}</div>
@@ -468,6 +469,22 @@ RegisterField({
                 var vm = this;
                 var el = $(this.$el).find('select');
 
+                el.selectize({
+                    highlight : false,
+                    loadThrottle : null,
+					valueField: 'id',
+					labelField: 'text',
+					create: false,
+					load: function(query, callback) {
+						vm.$root.getExternalData('12345678', callback, query);
+					}
+				}).on("change", function (a,b,c) {
+                    vm.$emit("input", $(this).val());
+                })
+                .val(this.value)
+                .trigger("change");
+
+                /*
                 var dataObj = { data: this.options };
                 if (this.schema.source !== undefined) {
                     dataObj = {
@@ -498,16 +515,15 @@ RegisterField({
                         multiple: this.schema.multiple
                     };
                 }
-
-
-
+              
                 el.select2(dataObj)
+                    .on("change", function (a,b,c) {
+                        vm.$emit("input", $(this).val());
+                    })
                     .val(this.value)
                     .trigger("change")
-                    // emit event on change.
-                    .on("change", function () {
-                        vm.$emit("input", $(this).val());
-                    });
+                    ;
+                */
             }
         },
         watch: {

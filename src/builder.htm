@@ -8,6 +8,10 @@
 
     <link rel="stylesheet" href="./css/uikit.min.css" />
     <link rel="stylesheet" href="./css/select2.css" />
+
+    <link rel="stylesheet" href="./css/selectize.css" /> 
+    <!-- <link rel="stylesheet" href="./css/selectize.default.css" />  -->
+
     <link rel="stylesheet" href="./css/quill.core.css">
     <link rel="stylesheet" href="./css/quill.snow.css">
     <link rel="stylesheet" href="./css/quill.bubble.css">
@@ -26,6 +30,9 @@
     <script src="./js/uikit.min.js"></script>
     <script src="./js/uikit-icons.min.js"></script>
     <script src="./js/select2.js"></script>
+
+    <script src="./js/selectize.js"></script>
+
     <script src="./js/quill.min.js"></script>
     <script src="./js/moment.min.js"></script>
     <script src="./js/daterangepicker.js"></script>
@@ -55,13 +62,19 @@
                     }];
                 },
                 dataSource: function (id, onSuccess, query) {
+                    var url = 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code';
+                    if (query !== undefined) url =  'https://restcountries.eu/rest/v2/name/' + query + '?fields=name;flag;alpha3Code';
                     $.ajax({
-                        url: "/Data/" + schemaId + "/" + query,
+                        url: url,
                         type: "GET",
-                        contentType: "application/json; charset=utf-8",
+                        //contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (data) {
-                           onSuccess(data);
+                            for (var i = 0; i < data.length; i++) {
+                                    data[i].id = data[i].alpha3Code;
+                                    data[i].text = data[i].name;
+                                }
+                            onSuccess(data);
                         }
                     });
                 }
