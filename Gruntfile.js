@@ -91,10 +91,11 @@ module.exports = function (grunt) {
           }
         },
     });
-    grunt.registerTask('build-dev', ['sass:dist']);
-    grunt.registerTask('build-dist', ['sass:dist', 'cssmin:target','terser:js','remove_comments:js','remove_comments:css']);
     grunt.loadNpmTasks("grunt-terser");
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-remove-comments');
+    grunt.registerTask('build-dev', ['sass:dist']);
+    grunt.registerTask('build-dist', ['sass:dist', 'cssmin:target','terser:js','remove_comments:js','remove_comments:css']);
+
 };

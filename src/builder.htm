@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="./css/uikit.min.css" />
     <link rel="stylesheet" href="./css/select2.css" />
 
-    <link rel="stylesheet" href="./css/selectize.css" /> 
-    <!-- <link rel="stylesheet" href="./css/selectize.default.css" />  -->
-
     <link rel="stylesheet" href="./css/quill.core.css">
     <link rel="stylesheet" href="./css/quill.snow.css">
     <link rel="stylesheet" href="./css/quill.bubble.css">
@@ -30,9 +27,6 @@
     <script src="./js/uikit.min.js"></script>
     <script src="./js/uikit-icons.min.js"></script>
     <script src="./js/select2.js"></script>
-
-    <script src="./js/selectize.js"></script>
-
     <script src="./js/quill.min.js"></script>
     <script src="./js/moment.min.js"></script>
     <script src="./js/daterangepicker.js"></script>
@@ -52,31 +46,88 @@
     </div>
 
     <script>
+        var dataSources = [
+             {
+                 //common/mandatory part
+                id:'countries',
+                title:'Countries',
+                searchable:true,
+                //custom part
+                config:{
+                    type: 'rest',
+                    method: 'GET',
+                    queryable: true,
+                    queryableUrl:'https://restcountries.eu/rest/v2/name/{{query}}?fields=name;flag;alpha3Code',
+                    getAllUrl:'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code',
+                    transform:function(data){
+                        var results=[];
+                        for (var i = 0; i < data.length; i++) {
+                            results.push({
+                                id: data[i].alpha3Code,
+                                text: data[i].name
+                            });
+                        }
+                        return results;
+                    }
+                }
+            },
+            {
+                 //common/mandatory part
+                id:'currencies',
+                title:'Currencies',
+                searchable:true,
+                //custom part
+                config:{
+                    type: 'rest',
+                    method: 'GET',
+                    queryable: false,
+                    getAllUrl:'https://openexchangerates.org/api/currencies.json',
+                    transform:function(data){
+                        var results=[];
+                        for (let [key, value] of Object.entries(data)) {
+                            results.push({
+                                id: key,
+                                text: value
+                            });
+                        }
+                        return results;
+                    }
+                }
+            }
+        ];
+
         $(document).ready(function () {
             coreform.formBuilder("#app", {
-                dataSourceList() {
-                    return [{
-                        id: '12345678',
-                        label: 'Countries',
-                        queryable: true
-                    }];
+                dataSourceList: function(callback) {
+                    var data = [];
+                    for (var i = 0; i < dataSources.length; i++) {
+                        data.push({
+                            id : dataSources[i].id, 
+                            text : dataSources[i].title
+                        });
+                    }
+                    callback(data);
                 },
                 dataSource: function (id, onSuccess, query) {
-                    var url = 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code';
-                    if (query !== undefined) url =  'https://restcountries.eu/rest/v2/name/' + query + '?fields=name;flag;alpha3Code';
-                    $.ajax({
-                        url: url,
-                        type: "GET",
-                        //contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (data) {
-                            for (var i = 0; i < data.length; i++) {
-                                    data[i].id = data[i].alpha3Code;
-                                    data[i].text = data[i].name;
-                                }
-                            onSuccess(data);
-                        }
-                    });
+                    var dataSource;
+                    for (var i = 0; i < dataSources.length; i++) {
+                        if(dataSources[i].id===id) {dataSource=dataSources[i];break;}
+                    }
+                    if(dataSource){
+                        var url = dataSource.config.getAllUrl;
+                        if (dataSource.config.queryable && query !== undefined) url = dataSource.config.queryableUrl.replace(/{{query}}/gi, query);
+                        $.ajax({
+                            url: url,
+                            crossDomain:true,
+                            type: dataSource.config.method,
+                            //contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if(dataSource.config.transform)data = dataSource.config.transform(data);
+                                onSuccess(data);
+                            }
+                        });
+                    }
                 }
 
             });

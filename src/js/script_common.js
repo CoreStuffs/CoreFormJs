@@ -136,8 +136,11 @@ var coreform = {
                 }
             },
             methods: {
-                    getExternalData : function (id, onSuccess, query) {
+                getExternalData : function (id, onSuccess, query) {
                     opts.dataSource(id, onSuccess, query);
+                },
+                getDataSources : function (onSuccess) {
+                    opts.dataSourceList(onSuccess);
                 }
             }
         });

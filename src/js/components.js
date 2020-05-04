@@ -438,19 +438,20 @@ RegisterField({
         if (!model.label) model.label = '';
         if (!model.variable) model.variable = '';
         if (!model.placeholder) model.placeholder = '';
-        if (!model.source) model.source = {minimumInputLength:3};
+        if (!model.minimumInputLength) model.minimumInputLength = 3;
+        if (!model.sourceId) model.sourceId = '';
         if ((typeof (model.multiple) === 'undefined')) model.multiple = false;
         return model;
     },
     fieldTemplate: {
         template:
-            `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label>
+                `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label>
                 <div class="uk-form-control bt-select-field" v-bind:class="{'uk-form-danger': this.$error}">
-	                <select @change="changeValue" :multiple="schema.multiple" class="bt-select-field no-autoinit" v-model="schema.id" :id="schema.id" :name="schema.id">
-	                </select>
+                    <select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
+                    </select>
                 </div>
                 <div class="error-message">{{this.$errorMessage}}</div>
-	        </cf_field>`,
+            </cf_field>`,
         data: function () {
             return {}
         },
@@ -468,62 +469,34 @@ RegisterField({
             buildSelect2: function () {
                 var vm = this;
                 var el = $(this.$el).find('select');
-
-                el.selectize({
-                    highlight : false,
-                    loadThrottle : null,
-					valueField: 'id',
-					labelField: 'text',
-					create: false,
-					load: function(query, callback) {
-						vm.$root.getExternalData('12345678', callback, query);
-					}
-				}).on("change", function (a,b,c) {
-                    vm.$emit("input", $(this).val());
-                })
-                .val(this.value)
-                .trigger("change");
-
-                /*
-                var dataObj = { data: this.options };
-                if (this.schema.source !== undefined) {
-                    dataObj = {
-                        ajax: {
-                            url: function (params) {
-                                if (params.term === undefined) {
-                                    return 'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code'
-                                } else {
-                                    return 'https://restcountries.eu/rest/v2/name/' + params.term + '?fields=name;flag;alpha3Code'
-                                }
-                            },
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data, params) {
-                                params.page = params.page || 1;
-                                for (var i = 0; i < data.length; i++) {
-                                    data[i].id = data[i].alpha3Code;
-                                    data[i].text = data[i].name;
-                                }
-                                return {
-                                    results: data
-                                };
-                            },
-                            cache: true
-                        },
-                        placeholder: this.schema.placeholder,
-                        minimumInputLength: this.schema.source.minimumInputLength,
-                        multiple: this.schema.multiple
+                           
+                $.fn.select2.amd.require(['select2/data/array', 'select2/utils'], function (ArrayData, Utils) {
+                    var RefAdapter = function($element, options) {
+                        RefAdapter.__super__.constructor.call(this, $element, options);
+                    }
+                    Utils.Extend(RefAdapter, ArrayData);
+                    RefAdapter.prototype.query = function (params, callback) {
+                        var f = function(results){
+                            callback({results:results});
+                        };
+                        vm.$root.getExternalData(vm.schema.sourceId, f, params.term);
+                        
                     };
-                }
-              
-                el.select2(dataObj)
+
+                    el.select2({
+                        placeholder: vm.schema.placeholder,
+                        minimumInputLength: vm.schema.minimumInputLength,
+                        multiple: vm.schema.multiple,
+                        dataAdapter: RefAdapter
+                    }) 
+                    .val(this.value)
+                    .trigger("change")                    
                     .on("change", function (a,b,c) {
                         vm.$emit("input", $(this).val());
-                    })
-                    .val(this.value)
-                    .trigger("change")
-                    ;
-                */
+                    });
+                });
+               
+            
             }
         },
         watch: {
@@ -544,14 +517,22 @@ RegisterField({
         template: `<div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Label text</label>
-                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="model.label"/>
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
-                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="model.placeholder"/>
                         </div>
                         <div class="uk-margin-small-bottom">
-                            <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="multiple"/> Allow multiple selection</label>
+                            <label for="drpDataSource" class="uk-form-label">Data source</label>
+                            <select class="uk-select uk-form-small" id="drpDataSource" v-model="model.sourceId">
+                                <option v-for="option in dataSources" v-bind:value="option.id">
+                                    {{option.text}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="uk-margin-small-bottom">
+                            <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="model.multiple"/> Allow multiple selection</label>
                         </div>
                     </div>`,
         validations: {
@@ -560,8 +541,19 @@ RegisterField({
                 'minLength': minLength(3)
             }
         },
+        mounted:function(){
+                    var t = this;
+                    var f = function(data){
+                        t.dataSources = data;
+                    }
+                    this.$root.getDataSources(f);
+                }
+        ,
         data: function () {
-            return this.value;
+            return {
+                model:this.value,
+                dataSources:[]
+            }
         },
 
         props: ["value"]

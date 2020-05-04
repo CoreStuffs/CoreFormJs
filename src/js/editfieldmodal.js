@@ -17,13 +17,6 @@ Vue.component('cf_editfieldmodal', {
                         <li>
                             <div v-if="isDataField" class="uk-margin-small-bottom">
                                 <label for="txtValue" class="uk-form-label">Name</label>
-                                <div class="uk-form-control bt-select-field">
-                                    <select @change="changeValue" class="variableSelector bt-select-field no-autoinit uk-select">
-                                      <option value="Att1">Att1</option>
-                                      <option value="two" disabled="disabled">Second (disabled)</option>
-                                      <option value="Att2">Att2</option>
-                                    </select>
-                                </div>
                                 <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}"/>
                             </div>
                             <component :key="editformFieldId" :is="'edit_' + field.type" v-bind="field" v-model="field"></component>
