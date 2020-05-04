@@ -32,8 +32,6 @@ module.exports = function (grunt) {
             js: {
                 files: {
                     './dist/coreform.builder.js': [
-                        "./src/js/vue.min.js",
-                        "./src/js/jquery.min.js",
                         "./src/js/uikit.js",
                         "./src/js/uikit-icons.js",
                         "./src/js/vuelidate.min.js",
@@ -50,8 +48,6 @@ module.exports = function (grunt) {
                         "./src/js/script_builder.js"
                     ],
                     './dist/coreform.renderer.js': [
-                        "./src/js/vue.min.js",
-                        "./src/js/jquery.min.js",
                         "./src/js/uikit.js",
                         "./src/js/uikit-icons.js",
                         "./src/js/vuelidate.min.js",
@@ -68,9 +64,36 @@ module.exports = function (grunt) {
                 }
             }
         },
+        remove_comments: {
+          js: {
+            options: {
+              multiline: true,
+              singleline: true,
+              keepSpecialComments: false
+            },
+            cwd: './dist/',
+            src: '*.js',
+            expand: false,
+            dest: 'dist/'
+          },
+          css: {
+            options: {
+              multiline: true,
+              singleline: true,
+              keepSpecialComments: false,
+              linein: true,
+              isCssLinein: true
+            },
+            cwd: './dist/',
+            src: '*.css',
+            expand: true,
+            dest: 'dist/'
+          }
+        },
     });
-    grunt.registerTask('build-dist', ['sass:dist', 'cssmin:target','terser:js']);
+    grunt.registerTask('build-dist', ['sass:dist', 'cssmin:target','terser:js','remove_comments:js','remove_comments:css']);
     grunt.loadNpmTasks("grunt-terser");
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-remove-comments');
 };
