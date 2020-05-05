@@ -51,7 +51,7 @@
                  //common/mandatory part
                 id:'countries',
                 title:'Countries',
-                searchable:true,
+                cached:false,
                 //custom part
                 config:{
                     type: 'rest',
@@ -75,7 +75,7 @@
                  //common/mandatory part
                 id:'currencies',
                 title:'Currencies',
-                searchable:true,
+                cached:true,
                 //custom part
                 config:{
                     type: 'rest',
@@ -114,8 +114,9 @@
                         if(dataSources[i].id===id) {dataSource=dataSources[i];break;}
                     }
                     if(dataSource){
-                        var url = dataSource.config.getAllUrl;
-                        if (dataSource.config.queryable && query !== undefined) url = dataSource.config.queryableUrl.replace(/{{query}}/gi, query);
+                        var url = null;
+                        if(dataSource.config.getAllUrl) url = dataSource.config.getAllUrl;
+                        if (dataSource.config.queryable && query) url = dataSource.config.queryableUrl.replace(/{{query}}/gi, query);
                         $.ajax({
                             url: url,
                             crossDomain:true,

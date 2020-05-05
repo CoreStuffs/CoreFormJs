@@ -473,21 +473,67 @@ RegisterField({
                 $.fn.select2.amd.require(['select2/data/array', 'select2/utils'], function (ArrayData, Utils) {
                     var RefAdapter = function($element, options) {
                         RefAdapter.__super__.constructor.call(this, $element, options);
+                        this.minimumInputLength = options.get('minimumInputLength');
+                        this.loadMode = options.get('loadMode') ?? 'once';
                     }
                     Utils.Extend(RefAdapter, ArrayData);
+                    var cache = null;
                     RefAdapter.prototype.query = function (params, callback) {
+                        params.term = params.term || '';
+
+                        if (params.term.length < this.minimumInputLength) {
+                          this.trigger('results:message', {
+                            message: 'inputTooShort',
+                            args: {
+                              minimum: this.minimumInputLength,
+                              input: params.term,
+                              params: params
+                            }
+                          });
+                    
+                          return;
+                        }
+
+
+                    // CACHED
+                    if(this.loadMode.toLowerCase() == 'once'){
+                        var s = function(data, term){
+                            return data.filter(obj=>term && obj.text.search(new RegExp(term, "i")) !== -1)
+                        };
                         var f = function(results){
+                            cache = results;
+                            callback({results:s(cache, params.term)});
+                        };
+                        if(!cache){
+                            vm.$root.getExternalData(vm.schema.sourceId, f, null);
+                        }else
+                        {
+                            return callback({results:s(cache, params.term)});
+                        }
+                    }
+                    // NOT CACHED
+                    else if(this.loadMode.toLowerCase() == 'always'){
+
+                        var f = function(results){
+                            cache = results;
                             callback({results:results});
                         };
                         vm.$root.getExternalData(vm.schema.sourceId, f, params.term);
                         
-                    };
+                    } else {
+                        this.trigger('results:message', {
+                            message: 'Invalid loadMode',
+                          });
+                    }
+                }
+
 
                     el.select2({
+                        dataAdapter: RefAdapter,
                         placeholder: vm.schema.placeholder,
                         minimumInputLength: vm.schema.minimumInputLength,
                         multiple: vm.schema.multiple,
-                        dataAdapter: RefAdapter
+                        loadMode : 'always'
                     }) 
                     .val(this.value)
                     .trigger("change")                    

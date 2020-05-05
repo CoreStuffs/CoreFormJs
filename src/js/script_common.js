@@ -111,64 +111,49 @@ function _extend(from, to) {
 }
 
 
+var __createVue = function(elementPath, opts){
+    new Vue({
+        el: elementPath,
+        data: function () {
+            return {
+                data: {},
+                schema: {
+                    'schemaVersion': 1,
+                    'formVersion': 0,
+                    'name': 'FirstSchema',
+                    'title': 'My first schema',
+                    fields: [],
+                    variables: []
+                }
+            }
+        },
+        computed: {
+            $form: function () {
+                return this.$refs.___formapp___;
+            }
+        },
+        methods: {
+            getExternalData : function (id, onSuccess, query) {
+                opts.dataSource(id, onSuccess, query);
+            },
+            getDataSources : function (onSuccess) {
+                opts.dataSourceList(onSuccess);
+            }
+        }
+    });
+}
+
+
 var coreform = {
     formBuilder: function (elementPath, opts) {
         $(elementPath).empty();
         $(elementPath).append($("<v-formbuilder id='___formapp___' ref='___formapp___'/>"));
-        new Vue({
-            el: elementPath,
-            data: function () {
-                return {
-                    data: {},
-                    schema: {
-                        'schemaVersion': 1,
-                        'formVersion': 0,
-                        'name': 'FirstSchema',
-                        'title': 'My first schema',
-                        fields: [],
-                        variables: []
-                    }
-                }
-            },
-            computed: {
-                $form: function () {
-                    return this.$refs.___formapp___;
-                }
-            },
-            methods: {
-                getExternalData : function (id, onSuccess, query) {
-                    opts.dataSource(id, onSuccess, query);
-                },
-                getDataSources : function (onSuccess) {
-                    opts.dataSourceList(onSuccess);
-                }
-            }
-        });
+        __createVue(elementPath, opts);
     },
     formRenderer: function (elementPath, opts) {
         $(elementPath).empty();
         $(elementPath).append($("<v-formrenderer id='___formapp___' ref='___formapp___'/>"));
-        new Vue({
-            el: elementPath,
-            data: function () {
-                return {
-                    data: {},
-                    schema: {
-                        'schemaVersion': 1,
-                        'formVersion': 0,
-                        'name': 'FirstSchema',
-                        'title': 'My first schema',
-                        fields: [],
-                        variables: []
-                    }
-                }
-            },
-            computed: {
-                $form: function () {
-                    return this.$refs.___formapp___;
-                }
-            }
-        });
+        __createVue(elementPath, opts);
     }
 }
 
