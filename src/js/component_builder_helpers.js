@@ -1,5 +1,5 @@
 ﻿Vue.component('cf_toolbutton', {
-    template: `<div v-on:click="click()" :class="'toolbar-button ' + cssclass"><img :src="'./img/'+ icon +'.svg'"/></div>`,
+    template: `<div v-on:click="click()" :class="'toolbar-button ' + cssclass"><div :class="'icon-' + icon" style="width:100%;height:100%"></div></div>`,
     data: function () {
         return {}
     },

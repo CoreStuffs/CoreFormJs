@@ -112,7 +112,7 @@ function _extend(from, to) {
 
 
 var __createVue = function(elementPath, opts){
-    new Vue({
+    return {
         el: elementPath,
         data: function () {
             return {
@@ -124,7 +124,8 @@ var __createVue = function(elementPath, opts){
                     'title': 'My first schema',
                     fields: [],
                     variables: []
-                }
+                },
+                datasources:[]
             }
         },
         computed: {
@@ -134,13 +135,26 @@ var __createVue = function(elementPath, opts){
         },
         methods: {
             getExternalData : function (id, onSuccess, query) {
-                opts.dataSource(id, onSuccess, query);
+                opts.getExternalData(id, onSuccess, query);
             },
-            getDataSources : function (onSuccess) {
-                opts.dataSourceList(onSuccess);
+            getExternalDataSources : function (onSuccess) {
+                opts.getExternalDataSources(onSuccess);
+            },
+            getExternalDataSource: function(id){
+                for (let index = 0; index < this.datasources.length; index++) {
+                    const element = this.datasources[index];
+                    if(element.id.toLowerCase()===id.toLowerCase()) return element;
+                }
             }
+
+        },
+        mounted:function(){
+            var t = this;
+            opts.getExternalDataSources(function(data){
+                t.datasources = data;
+            });
         }
-    });
+    };
 }
 
 
@@ -148,12 +162,20 @@ var coreform = {
     formBuilder: function (elementPath, opts) {
         $(elementPath).empty();
         $(elementPath).append($("<v-formbuilder id='___formapp___' ref='___formapp___'/>"));
-        __createVue(elementPath, opts);
+        var vue = __createVue(elementPath, opts);
+        vue.methods.saveFormSchema=function(schema, callback){
+            opts.saveFormSchema(schema, callback);
+        }        
+        new Vue(vue);
     },
     formRenderer: function (elementPath, opts) {
         $(elementPath).empty();
         $(elementPath).append($("<v-formrenderer id='___formapp___' ref='___formapp___'/>"));
-        __createVue(elementPath, opts);
+        var vue = __createVue(elementPath, opts);
+        vue.methods.saveFormData=function(data, callback){
+            opts.saveFormData(data, callback);
+        }
+        new Vue(vue);
     }
 }
 

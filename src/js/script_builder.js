@@ -95,7 +95,7 @@ Vue.component('v-formbuilder', {
     },
     methods: {
         saveSchema: function () {
-            var url = "/Form/NewModel";
+           /* var url = "/Form/NewModel";
             var urlParams = new URLSearchParams(window.location.search);
             var schemaId = urlParams.get('schemaid');
             if (schemaId !== undefined && schemaId !== "") {
@@ -113,6 +113,9 @@ Vue.component('v-formbuilder', {
                     UIkit.modal.alert("Successfully saved");
                     Object.assign(schema, data);
                 }
+            });*/
+            this.$root.saveFormSchema(this.schema, function (data) {
+                UIkit.modal.alert("Successfully saved");
             });
         },
         openSettingsByObject: function (obj, callback) {

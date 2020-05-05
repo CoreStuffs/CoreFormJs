@@ -473,8 +473,9 @@ RegisterField({
                 $.fn.select2.amd.require(['select2/data/array', 'select2/utils'], function (ArrayData, Utils) {
                     var RefAdapter = function($element, options) {
                         RefAdapter.__super__.constructor.call(this, $element, options);
+                        this.datasource = vm.$root.getExternalDataSource(vm.schema.sourceId);
                         this.minimumInputLength = options.get('minimumInputLength');
-                        this.loadMode = options.get('loadMode') ?? 'once';
+                        this.loadMode = this.datasource.loadMode ?? 'once';
                     }
                     Utils.Extend(RefAdapter, ArrayData);
                     var cache = null;
@@ -563,22 +564,22 @@ RegisterField({
         template: `<div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Label text</label>
-                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="model.label"/>
+                            <input id="txtLabel" type="text" class="uk-input uk-form-small" v-model="label"/>
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="txtPlaceholder" class="uk-form-label">Placeholder text</label>
-                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="model.placeholder"/>
+                            <input id="txtPlaceholder" type="text" class="uk-input uk-form-small" v-model="placeholder"/>
                         </div>
                         <div class="uk-margin-small-bottom">
                             <label for="drpDataSource" class="uk-form-label">Data source</label>
-                            <select class="uk-select uk-form-small" id="drpDataSource" v-model="model.sourceId">
+                            <select class="uk-select uk-form-small" id="drpDataSource" v-model="sourceId">
                                 <option v-for="option in dataSources" v-bind:value="option.id">
                                     {{option.text}}
                                 </option>
                             </select>
                         </div>
                         <div class="uk-margin-small-bottom">
-                            <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="model.multiple"/> Allow multiple selection</label>
+                            <label for="chkMultiple" class="uk-form-label"><input id="chkMultiple" class="uk-checkbox" type="checkbox" v-model="multiple"/> Allow multiple selection</label>
                         </div>
                     </div>`,
         validations: {
@@ -587,19 +588,13 @@ RegisterField({
                 'minLength': minLength(3)
             }
         },
-        mounted:function(){
-                    var t = this;
-                    var f = function(data){
-                        t.dataSources = data;
-                    }
-                    this.$root.getDataSources(f);
-                }
-        ,
-        data: function () {
-            return {
-                model:this.value,
-                dataSources:[]
+        computed:{
+            dataSources : function(){
+                return this.$root.datasources;
             }
+        },
+        data: function () {
+            return this.value
         },
 
         props: ["value"]

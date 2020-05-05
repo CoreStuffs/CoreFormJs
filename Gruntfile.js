@@ -42,9 +42,9 @@ module.exports = function (grunt) {
                         "./src/js/daterangepicker.js",
                         "./src/js/sortable.min.js",
                         "./src/js/script_common.js",
-                        "./src/js/editfieldmodal.js",
                         "./src/js/component_builder_helpers.js",
                         "./src/js/components.js",
+                        "./src/js/editfieldmodal.js",
                         "./src/js/script_builder.js"
                     ],
                     './dist/coreform.renderer.js': [
@@ -90,12 +90,20 @@ module.exports = function (grunt) {
             dest: 'dist/'
           }
         },
+        svgcss: {
+          defaultOptions: {
+            files: {
+              './src/css/sprites.css': ['./src/img/*.svg']
+            }
+          }
+        }
     });
     grunt.loadNpmTasks("grunt-terser");
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-remove-comments');
-    grunt.registerTask('build-dev', ['sass:dist']);
-    grunt.registerTask('build-dist', ['sass:dist', 'cssmin:target','terser:js','remove_comments:js','remove_comments:css']);
+    grunt.loadNpmTasks('grunt-svg-css');
+    grunt.registerTask('build-dev', ['svgcss:defaultOptions', 'sass:dist']);
+    grunt.registerTask('build-dist', ['svgcss:defaultOptions', 'sass:dist', 'cssmin:target','terser:js','remove_comments:js','remove_comments:css']);
 
 };

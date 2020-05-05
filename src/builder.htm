@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>VueJS</title>
+    <title>CoreFormJS Builder - Dev</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/quill.snow.css">
     <link rel="stylesheet" href="./css/quill.bubble.css">
     <link rel="stylesheet" href="./css/daterangepicker.css">
+    <link rel="stylesheet" href="./css/sprites.css" />
     <link rel="stylesheet" href="./css/styles.css" />
     <link rel="stylesheet" href="./css/style_builder.css" />
 
@@ -39,11 +40,7 @@
 </head>
 <body>
 
-    [<a href="/"><< Back</a>]
-
-    <div id="app">
-
-    </div>
+    <div id="app"/>
 
     <script>
         var dataSources = [
@@ -51,12 +48,11 @@
                  //common/mandatory part
                 id:'countries',
                 title:'Countries',
-                cached:false,
+                loadMode: 'always',
                 //custom part
                 config:{
                     type: 'rest',
                     method: 'GET',
-                    queryable: true,
                     queryableUrl:'https://restcountries.eu/rest/v2/name/{{query}}?fields=name;flag;alpha3Code',
                     getAllUrl:'https://restcountries.eu/rest/v2/all?fields=name;flag;alpha3Code',
                     transform:function(data){
@@ -75,12 +71,11 @@
                  //common/mandatory part
                 id:'currencies',
                 title:'Currencies',
-                cached:true,
+                loadMode: 'once',
                 //custom part
                 config:{
                     type: 'rest',
                     method: 'GET',
-                    queryable: false,
                     getAllUrl:'https://openexchangerates.org/api/currencies.json',
                     transform:function(data){
                         var results=[];
@@ -98,17 +93,21 @@
 
         $(document).ready(function () {
             coreform.formBuilder("#app", {
-                dataSourceList: function(callback) {
+                saveFormSchema : function(schema, callback){
+                    alert(JSON.stringify(schema));
+                },
+                getExternalDataSources: function(callback) {
                     var data = [];
                     for (var i = 0; i < dataSources.length; i++) {
                         data.push({
                             id : dataSources[i].id, 
-                            text : dataSources[i].title
+                            text : dataSources[i].title,
+                            loadMode : dataSources[i].loadMode
                         });
                     }
                     callback(data);
                 },
-                dataSource: function (id, onSuccess, query) {
+                getExternalData: function (id, onSuccess, query) {
                     var dataSource;
                     for (var i = 0; i < dataSources.length; i++) {
                         if(dataSources[i].id===id) {dataSource=dataSources[i];break;}
@@ -116,7 +115,7 @@
                     if(dataSource){
                         var url = null;
                         if(dataSource.config.getAllUrl) url = dataSource.config.getAllUrl;
-                        if (dataSource.config.queryable && query) url = dataSource.config.queryableUrl.replace(/{{query}}/gi, query);
+                        if (dataSource.config.queryableUrl && query) url = dataSource.config.queryableUrl.replace(/{{query}}/gi, query);
                         $.ajax({
                             url: url,
                             crossDomain:true,

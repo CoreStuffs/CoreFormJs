@@ -1,6 +1,4 @@
-﻿
-
-Vue.component('cf_editfieldmodal', {
+﻿Vue.component('cf_editfieldmodal', {
     template: `<div :ref="editformId" :id="editformId" class="uk-flex-top" uk-modal v-cloak>
         <div class="uk-modal-dialog uk-margin-auto-vertical ">
             <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -19,7 +17,7 @@ Vue.component('cf_editfieldmodal', {
                                 <label for="txtValue" class="uk-form-label">Name</label>
                                 <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}"/>
                             </div>
-                            <component :key="editformFieldId" :is="'edit_' + field.type" v-bind="field" v-model="field"></component>
+                            <component :key="editformFieldId" :is="(field ? fieldType(field) : null)" v-bind="field" v-model="field"></component>
                         </li>
                         <li>
                             <pre><code>{{field}}</code></pre>
@@ -44,7 +42,7 @@ Vue.component('cf_editfieldmodal', {
     computed: {
         isDataField: function () {
             return this.field.type && registeredFields.get(this.field.type).isDataField;
-        }
+        },
     },
     validations: function () {
         var v = this.$options.components['edit_' + this.field.type].validations;
@@ -82,6 +80,13 @@ Vue.component('cf_editfieldmodal', {
         }
     },
     methods: {
+        fieldType: function(field){
+            if(!field || !field.type){
+                alert(JSON.stringify(field));
+                return;
+            } ;
+            return 'edit_' + field.type;
+        },
         changeValue: function (evt) {
             this.$emit('input', evt.srcElement.value)
         },
