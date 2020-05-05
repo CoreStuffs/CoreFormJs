@@ -32,6 +32,22 @@
         border-left: 1px solid #e5e5e5;
     }
 
+.uk-table th{
+    font-size:12px
+}
+
+::-webkit-input-placeholder { /* Edge */
+    color: #f0f0f0;
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #f0f0f0;
+  }
+  
+  ::placeholder {
+    color: #f0f0f0;
+  }
+
 div[type="grid"] > .toolbar {
     top: -0.75em
 }

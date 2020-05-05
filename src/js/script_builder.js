@@ -18,7 +18,7 @@ Vue.component('v-formbuilder', {
 
                             <div id="mnuComponents" style="margin-bottom:1em;margin-top:1em;">
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">
-                                    Text input
+                                 Text input
                                 </a>
                                 <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="passwordField">
                                     Password input
@@ -43,21 +43,36 @@ Vue.component('v-formbuilder', {
 
                         </div>
                         <div class="uk-width-3-5@m">
+                            
                             <fieldset class="uk-fieldset">
                                 <div class="uk-card uk-card-default uk-card-body">
                                     <h3 class="uk-card-title">{{schema.title}}</h3>
-                                    <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
-                                        <component v-for="field in schema.fields"
-                                                    :key="field.id"
-                                                    :is="field.type"
-                                                    :schema="field"
-                                                    v-bind="field"
-                                                    v-model="data[field.variable]">
-                                        </component>
-                                    </div>
+
+                                    <ul uk-tab>
+                                        <li><a href="#">Data model</a></li>
+                                        <li><a href="#">Form designer</a></li>
+                                    </ul>
+                                    <ul class="uk-switcher">
+                                        <li>
+                                            <cf_variableTable :variables="schema.variables"/>
+                                        </li>
+                                        <li>
+                                            <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
+                                                <component v-for="field in schema.fields"
+                                                            :key="field.id"
+                                                            :is="field.type"
+                                                            :schema="field"
+                                                            v-bind="field"
+                                                            v-model="data[field.variable]">
+                                                </component>
+                                            </div>
+                                        </li>
+                                    </ul>
                                     <small>version {{schema.formVersion}}</small>
                                 </div>
                             </fieldset>
+     
+
                             <ul uk-accordion="multiple: true">
                                 <li>
                                     <a class="uk-accordion-title" href="#">Schema</a>

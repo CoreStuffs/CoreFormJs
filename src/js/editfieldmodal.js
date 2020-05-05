@@ -14,8 +14,13 @@
                     <ul class="uk-switcher uk-margin" uk-overflow-auto>
                         <li>
                             <div v-if="isDataField" class="uk-margin-small-bottom">
-                                <label for="txtValue" class="uk-form-label">Name</label>
-                                <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}"/>
+                                <label for="txtValue" class="uk-form-label">Variable name</label>
+                                <!--<input id="txtValue" type="text" class="uk-input uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}"/>-->
+                                <select class="uk-select uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}">
+                                    <option v-for="option in this.$root.schema.variables" v-bind:value="option.name">
+                                        {{ option.name }}
+                                    </option>
+                                </select>
                             </div>
                             <component :key="editformFieldId" :is="(field ? fieldType(field) : null)" v-bind="field" v-model="field"></component>
                         </li>
@@ -82,7 +87,6 @@
     methods: {
         fieldType: function(field){
             if(!field || !field.type){
-                alert(JSON.stringify(field));
                 return;
             } ;
             return 'edit_' + field.type;

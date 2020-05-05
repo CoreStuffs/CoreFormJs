@@ -530,6 +530,7 @@ RegisterField({
 
 
                     el.select2({
+                        dropdownParent: $("#___formapp___"),
                         dataAdapter: RefAdapter,
                         placeholder: vm.schema.placeholder,
                         minimumInputLength: vm.schema.minimumInputLength,
