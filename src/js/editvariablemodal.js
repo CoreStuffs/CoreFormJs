@@ -45,7 +45,10 @@
                 name:{
                     'required':window.validators.required,
                     'alphaNum':window.validators.alphaNum,
-                    'minLength':window.validators.minLength(3)
+                    'minLength':window.validators.minLength(3),
+                    'unique': (value) => (
+                        this.$root.$form.schema.variables.filter(o=>o.name.toLowerCase()==value.toLowerCase()).length === (this.srcName.toLowerCase()!==value.toLowerCase()?0:1) 
+                        )
                 }
             }
         }
@@ -87,9 +90,15 @@
                     var obj = extend(this.variable);
                     var found = false;
                     this.$parent.schema.variables.forEach(variable => {
-                        if(variable.name === this.srcName$){
+                        if(variable.name === this.srcName){
                             variable = obj;
                             found = true;
+                            var t = this;
+                            this.$root.$form.applyNodeModification(function(node){
+                                if(node.variable && node.variable.toLowerCase() === t.srcName.toLowerCase()){
+                                    node.variable = variable.name;
+                                }
+                            });
                         }
                     });
                     if(!found) this.$parent.schema.variables.push(obj);

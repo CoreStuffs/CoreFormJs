@@ -84,8 +84,8 @@ var textInput = {
                    </div>`,
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             }
         },
         data: function () {
@@ -151,14 +151,14 @@ RegisterField({
                    </div>`,
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             },
             'checkedValue': {
-                'required': required,
+                'required': window.validators.required,
             },
             'uncheckedValue': {
-                'required': required,
+                'required': window.validators.required,
             }
         },
         data: function () {
@@ -233,8 +233,8 @@ RegisterField({
         },
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             }
         },
         props: ["value", "schema"],
@@ -287,8 +287,8 @@ RegisterField({
                    </div>`,
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             }
         },
         data: function () {
@@ -319,8 +319,8 @@ RegisterField({
         },
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             }
         },
         props: ["value", "schema"],
@@ -418,8 +418,8 @@ RegisterField({
                    </div>`,
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             }
         },
         data: function () {
@@ -585,8 +585,8 @@ RegisterField({
                     </div>`,
         validations: {
             'label': {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'minLength': window.validators.minLength(3)
             }
         },
         computed:{

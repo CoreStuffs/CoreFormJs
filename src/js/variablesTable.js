@@ -17,7 +17,7 @@ Vue.component('cf_variableTable', {
                     <span :v-if="variable.validations.filter(o=>o.type.toLowerCase()==='required').length>0" uk-icon="check"></span>
                 </td>
                 <td class="uk-text-nowrap">
-                    <a href="" uk-icon="icon: pencil"></a>
+                    <a @click="editVariable(variable)" uk-icon="icon: pencil"></a>
                 </td>
             </tr>
         </tbody>
@@ -31,11 +31,14 @@ Vue.component('cf_variableTable', {
     </table>
 </div>`,
 data: function () {
-    return this.variables;
+    return { };
 },
 methods:{
     addVariable:function(){
         this.$parent.openVariableSettings();
+    },
+    editVariable:function(variable){
+        this.$parent.openVariableSettings(variable);
     },
     changeRequired:function(e,v){
         if(e.srcElement.checked){

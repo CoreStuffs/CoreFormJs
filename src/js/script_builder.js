@@ -136,25 +136,6 @@ Vue.component('v-formbuilder', {
     },
     methods: {
         saveSchema: function () {
-           /* var url = "/Form/NewModel";
-            var urlParams = new URLSearchParams(window.location.search);
-            var schemaId = urlParams.get('schemaid');
-            if (schemaId !== undefined && schemaId !== "") {
-                url = "/Form/" + schemaId + "/save";
-            }
-            var schema = this.schema;
-            var t = this;
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: JSON.stringify(schema),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    UIkit.modal.alert("Successfully saved");
-                    Object.assign(schema, data);
-                }
-            });*/
             this.$root.saveFormSchema(this.schema, function (data) {
                 UIkit.modal.alert("Successfully saved");
             });
@@ -312,7 +293,23 @@ Vue.component('v-formbuilder', {
             });
             return highestId + 1;
         },
-
+        applyNodeModification: function (modification) {
+            var schema = this.schema;
+            var __s = function (node, modification) {
+                var subColl = null;
+                if (typeof (node.columns) !== "undefined") subColl = node.columns;
+                if (typeof (node.fields) !== "undefined") subColl = node.fields;
+                modification(node);
+                if (subColl !== null) {
+                    for (var i = 0; i < subColl.length; i++) {
+                        var res = __s(subColl[i], modification);
+                        if (res !== null) return res;
+                    }
+                }
+                return null;
+            }
+            __s(schema, modification);
+        },
         findNodeById: function (id) {
             var schema = this.schema;
             if (id === "formContainer") return schema;
