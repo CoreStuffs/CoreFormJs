@@ -10607,6 +10607,14 @@ iframe.uk-cover {
     bottom: 0;
     left: 0px;
     border-left: 1px solid #e5e5e5; }
+  .cs-cf .uk-table th {
+    font-size: 12px; }
+  .cs-cf ::-webkit-input-placeholder {
+    color: #f0f0f0; }
+  .cs-cf :-ms-input-placeholder {
+    color: #f0f0f0; }
+  .cs-cf ::placeholder {
+    color: #f0f0f0; }
   .cs-cf div[type="grid"] > .toolbar {
     top: -0.75em; }
   .cs-cf *[uk-icon] {
@@ -10691,10 +10699,22 @@ iframe.uk-cover {
     border: 1px dotted #f0f0f0; }
   .cs-cf div[type="grid"] > .uk-grid:hover > * {
     border: 1px dotted silver; }
+  .cs-cf #mnuComponents {
+    padding-bottom: 20px; }
+  .cs-cf #mnuComponents .draggable {
+    border: 1px solid transparent;
+    font-size: 12px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    cursor: grab;
+    margin-top: 3px; }
+  .cs-cf #mnuComponents .draggable:hover {
+    border: 1px dashed gray; }
   .cs-cf .sortable-ghost {
     border: 1px dashed gray !important; }
   .cs-cf .sortable-dragitem {
-    border: 1px dashed gray !important; }
+    border: 1px dashed gray !important;
+    font-size: 14px; }
   .cs-cf .sortable-item {
     position: relative;
     border: 1px solid transparent; }

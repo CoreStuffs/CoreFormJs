@@ -10,26 +10,34 @@ Vue.component('v-formbuilder', {
 
                                 <ul uk-tab>
                                     <li><a href="#">Identification</a></li>
-                                    <li><a href="#">Form designer</a></li>
                                     <li><a href="#">Data model</a></li>
+                                    <li><a href="#">Form designer</a></li>
+                                    <li><a href="#">Debug</a></li>
                                 </ul>
-                                <ul class="uk-switcher">
+                                <ul class="uk-switcher uk-margin-bottom">
                                     <li>
-                                        <div id="formContainer" data-ref="root" class="uk-text-light uk-form-stacked">
-                                            <div>
+                                        <form id="formContainer" data-ref="root" class=" uk-form-stacked">
+                                            <div class="uk-margin">
                                                 <label class="uk-form-label" for="formName">Name:</label>
-                                                <input id="formName" class="uk-input uk-form-small" v-model="schema.name" />
+                                                <div class="uk-form-controls">
+                                                    <input id="formName" class="uk-input uk-form-small" v-model="schema.name" />
+                                                </div>
                                             </div>
-                                            <div>
+                                            <div class="uk-margin">
                                                 <label class="uk-form-label" for="formTitle">Title:</label>
-                                                <input id="formTitle" class="uk-input uk-form-small" v-model="schema.title" />
+                                                <div class="uk-form-controls">
+                                                    <input id="formTitle" class="uk-input uk-form-small" v-model="schema.title" />
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </li>
                                     <li>
+                                        <cf_variableTable :variables="schema.variables"/>
+                                    </li>
+                                    <li>    
                                         <div class="uk-grid-collapse" uk-grid>
                                             <div class="uk-width-expand@s">
-                                                <div id="formContainer" data-ref="root" class="uk-text-light nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
+                                                <div id="formContainer" data-ref="root" class=" nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
                                                     <component v-for="field in schema.fields"
                                                                 :key="field.id"
                                                                 :is="field.type"
@@ -40,58 +48,68 @@ Vue.component('v-formbuilder', {
                                                 </div>
                                             </div>
                                             <div class="uk-width-1-5@s">
-                                                <div id="mnuComponents" class="uk-sticky uk-active uk-sticky-bottom uk-sticky-fixed"  uk-sticky="bottom: 10000">
-                                                        <div class="draggable" data-type="textField"">
-                                                            <span uk-icon="tag"></span>
-                                                            Text input
-                                                        </div>
-                                                        <div class="draggable" data-type="passwordField">
-                                                            <span uk-icon="tag"></span>                                                        
-                                                            Password input
-                                                        </div>
-                                                        <div class="draggable" data-type="checkboxField">
-                                                            <span uk-icon="tag"></span>                                                                                                                
-                                                            Decision
-                                                        </div>
-                                                        <div class="draggable" data-type="richtextField">
-                                                            <span uk-icon="tag"></span>                                                        
-                                                            Richtext Field
-                                                        </div>
-                                                        <div class="draggable" data-type="datetimeField">
-                                                            <span uk-icon="tag"></span>                                                                                                                
-                                                            Date & Time Field
-                                                        </div>
-                                                        <div class="draggable" data-type="selectField">
-                                                            <span uk-icon="tag"></span>                                                                                                                
-                                                            List selector
-                                                        </div>
-                                                        <div class="draggable" data-type="grid">
-                                                            <span uk-icon="tag"></span>                                                                                                                
-                                                            Columns
-                                                        </div>
+                                                <div class="uk-sticky uk-active uk-sticky-bottom uk-sticky-fixed"  uk-sticky="bottom: 100000">
+                                                    <div id="mnuComponents">
+                                                            <div class="draggable" data-type="textField"">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>
+                                                                Text input
+                                                            </div>
+                                                            <div class="draggable" data-type="passwordField">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>                                                        
+                                                                Password input
+                                                            </div>
+                                                            <div class="draggable" data-type="checkboxField">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>                                                                                                                
+                                                                Decision
+                                                            </div>
+                                                            <div class="draggable" data-type="richtextField">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>                                                        
+                                                                Richtext Field
+                                                            </div>
+                                                            <div class="draggable" data-type="datetimeField">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>                                                                                                                
+                                                                Date & Time Field
+                                                            </div>
+                                                            <div class="draggable" data-type="selectField">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>                                                                                                                
+                                                                List selector
+                                                            </div>
+                                                            <div class="draggable" data-type="grid">
+                                                                <span uk-icon="tag" class="uk-margin-small-right"></span>                                                                                                                
+                                                                Columns
+                                                            </div>
+                                                    </div>
+                                                    <a @click="saveSchema()" style="font-size:12px">
+                                                        <span uk-icon="icon: check" class="uk-margin-small-right uk-text-left"></span>
+                                                        <span class="uk-text-middle">Test validators</span>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </li>
                                     <li>
-                                        <cf_variableTable :variables="schema.variables"/>
+                                        <ul uk-accordion="multiple: true">
+                                            <li class="uk-open">
+                                                <a class="uk-accordion-title" href="#">Schema</a>
+                                                <div class="uk-accordion-content"><pre><code style="font-size:12px">{{ schema }}</code></pre></div>
+                                            </li>
+                                            <li>
+                                                <a class="uk-accordion-title" href="#">Data</a>
+                                                <div class="uk-accordion-content"><pre><code style="font-size:12px">{{ data }}</code></pre></div>
+                                            </li>
+                                        </ul>
                                     </li>
                                 </ul>
                                 
-     
-                                <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
+
+                                <button class="uk-button uk-button-primary uk-button-small" @click="saveSchema()">
+                                    <span uk-icon="icon: upload" class="uk-margin-small-right uk-text-left"></span>
+                                    <span class="uk-text-middle">Save</span>
+                                </button>
                             </fieldset>
 
-                            <ul uk-accordion="multiple: true">
-                                <li>
-                                    <a class="uk-accordion-title" href="#">Schema</a>
-                                    <div class="uk-accordion-content"><pre><code>{{ schema }}</code></pre></div>
-                                </li>
-                                <li>
-                                    <a class="uk-accordion-title" href="#">Data</a>
-                                    <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
-                                </li>
-                            </ul>
+                          
                     </div>
                     <cf_editfieldmodal ref="editFormModal" />
                     <cf_editvariablemodal ref="editVariableModal" />

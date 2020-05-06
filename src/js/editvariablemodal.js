@@ -43,7 +43,9 @@
         return{
             variable: {
                 name:{
-                    'required':required
+                    'required':window.validators.required,
+                    'alphaNum':window.validators.alphaNum,
+                    'minLength':window.validators.minLength(3)
                 }
             }
         }

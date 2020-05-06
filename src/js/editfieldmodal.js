@@ -64,8 +64,9 @@
         }
         if (this.isDataField) {
             obj.field.variable = {
-                'required': required,
-                'minLength': minLength(3)
+                'required': window.validators.required,
+                'alphaNum': window.validators.alphaNum,
+                'minLength': window.validators.minLength(3)
             }
         };
 
@@ -98,8 +99,6 @@
             this.$emit('input', evt.srcElement.value)
         },
         show: function (field, callback) {
-            //ensure that data are not chached
-            //this.editformId = Date.now();
             this.editformFieldId = Date.now();
 
             this.field = extend(field);

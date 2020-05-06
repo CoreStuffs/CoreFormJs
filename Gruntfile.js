@@ -45,6 +45,8 @@ module.exports = function (grunt) {
                         "./src/js/component_builder_helpers.js",
                         "./src/js/components.js",
                         "./src/js/editfieldmodal.js",
+                        "./src/js/editvariablemodal.js",
+                        "./src/js/variablesTable.js",
                         "./src/js/script_builder.js"
                     ],
                     './dist/coreform.renderer.js': [

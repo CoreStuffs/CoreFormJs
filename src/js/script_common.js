@@ -2,9 +2,6 @@
 var registeredFields = new Map();
 
 
-var required = window.validators.required;
-var minLength = window.validators.minLength;
-
 var formValidators = {
     "required": {
         build: function (data) {
