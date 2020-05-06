@@ -18,7 +18,7 @@ Vue.component('v-formrenderer', {
                                     </div>
 
                                     <div style="text-align:right">
-                                        <button class="uk-button uk-button-primary">Submit</button>
+                                        <button @click="saveData()" class="uk-button uk-button-primary">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -57,26 +57,12 @@ Vue.component('v-formrenderer', {
             this.$v.$touch();
         },
         saveData: function () {
-            //var url = "/Form/NewModel";
-            //var urlParams = new URLSearchParams(window.location.search);
-            //var schemaId = urlParams.get('schemaid');
-            //if (schemaId !== undefined && schemaId !== "") {
-            //    url = "/Form/" + schemaId + "/save";
-            //}
-
-            //$.ajax({
-            //    url: url,
-            //    type: "POST",
-            //    data: JSON.stringify(this.schema),
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: function (data) {
-            //        alert("Data Loaded: " + data);
-            //    }
-            //});
-
-
-
+            this.$v.$touch();
+            if (!this.$v.$error) {
+                this.$root.saveFormData(this.data, function (data) {
+                    UIkit.modal.alert("Successfully saved");
+                });
+            }
         }
     },
     created: function () {

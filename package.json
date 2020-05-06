@@ -1,10 +1,10 @@
 {
-  "name": "core-form-js",
-  "version": "0.0.0",
+  "name": "coreform-js",
+  "version": "0.1.0",
   "description": "CoreFormJs",
-  "main": "server.js",
+  "main": "Builder.htm",
   "author": {
-    "name": ""
+    "name": "Jeff Gueldre"
   },
   "devDependencies": {
     "grunt": "^1.1.0",
@@ -15,5 +15,12 @@
     "grunt-svg-css": "^0.2.9",
     "grunt-terser": "^1.0.0",
     "node-sass": "^4.14.0"
-  }
+  },
+  "unpkg": "dist/coreform.builder.js",
+  "files": [
+    "dist/coreform.builder.min.js",
+    "dist/coreform.builder.min.css",
+    "dist/coreform.remderer.min.js",
+    "dist/coreform.renderer.min.css"
+  ]
 }

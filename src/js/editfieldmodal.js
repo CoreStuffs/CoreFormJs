@@ -18,8 +18,8 @@
                                 <!--<input id="txtValue" type="text" class="uk-input uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}"/>-->
                                 <div class="uk-grid-column-collapse" uk-grid>
                                     <select class="uk-select uk-form-small uk-width-expand@m" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}">
-                                        <option v-for="option in this.$root.schema.variables" v-bind:value="option.name">
-                                            {{ option.name }}
+                                        <option v-for="option in acceptedVariables" v-bind:value="option.name">
+                                            {{ option.name }} ({{variableType(option.type)}})
                                         </option>
                                     </select>
                                     <a href="#" @click="addVariable()" class="uk-width-auto@m" style="margin-left:5px;margin-top:5px" uk-icon="icon: plus-circle"></a>
@@ -51,6 +51,13 @@
         isDataField: function () {
             return this.field.type && registeredFields.get(this.field.type).isDataField;
         },
+        acceptedVariables:function(){
+            var l=registeredFields.get(this.field.type).acceptedVariableTypes;(this.field.type);
+            return this.$root.schema.variables.filter(v=>
+                l.filter(r=>r.toLowerCase()===v.type.toLowerCase()).length===1
+            );
+            
+        }
     },
     validations: function () {
         var v = this.$options.components['edit_' + this.field.type].validations;
@@ -89,6 +96,9 @@
         }
     },
     methods: {
+        variableType:function(name){
+            return this.$root.variableType(name);
+        },
         fieldType: function(field){
             if(!field || !field.type){
                 return;
@@ -116,7 +126,7 @@
         },
         addVariable:function(){
             var t = this;
-            this.$parent.openVariableSettings(null, function(vari){
+            this.$parent.openVariableSettings(null, this.field ? registeredFields.get(this.field.type).acceptedVariableTypes : null , function(vari){
                 t.field.variable = vari.name;
                 UIkit.modal(document.getElementById(t.editformId)).show();
             });

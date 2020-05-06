@@ -13,6 +13,16 @@ var formValidators = {
             return window.validators.minLength(data.minLength);
         }
     },
+    "maxLength": {
+        build: function (data) {
+            return window.validators.maxLength(data.maxLength);
+        }
+    },
+    "number": {
+        build: function (data) {
+            return window.validators.number;
+        }
+    },
     "email": {
         build: function (data) {
             return window.validators.email;
@@ -128,9 +138,22 @@ var __createVue = function(elementPath, opts){
         computed: {
             $form: function () {
                 return this.$refs.___formapp___;
+            },
+            variableTypes:function(){
+                return {
+                    'text':'String or Text',
+                    'number':'Numeric value',
+                    'richtext':'Rich content',
+                    'datetime':'Date and time',
+                    'datetimerange':'Date and time range',
+                    'array':'Multiple values'
+                };
             }
         },
         methods: {
+            variableType:function(name){
+                return this.variableTypes[name];
+            },
             getExternalData : function (id, onSuccess, query) {
                 opts.getExternalData(id, onSuccess, query);
             },
@@ -156,23 +179,51 @@ var __createVue = function(elementPath, opts){
 
 
 var coreform = {
-    formBuilder: function (elementPath, opts) {
+    formBuilder: function (elementPath, opts, schema) {
         $(elementPath).empty();
         $(elementPath).append($("<v-formbuilder id='___formapp___' ref='___formapp___'/>"));
         var vue = __createVue(elementPath, opts);
         vue.methods.saveFormSchema=function(schema, callback){
-            opts.saveFormSchema(schema, callback);
+            opts.onSavingSchema(schema, callback);
         }        
-        new Vue(vue);
+        var v = new Vue(vue);
+        if(schema)v.schema = schema;
+        return{
+            setSchema:function(schema){
+                v.schema = schema; 
+                return this;             
+            },
+            getSchema:function(){
+                return v.schema;              
+            }
+        }
     },
-    formRenderer: function (elementPath, opts) {
+    formRenderer: function (elementPath, opts, schema, data) {
         $(elementPath).empty();
         $(elementPath).append($("<v-formrenderer id='___formapp___' ref='___formapp___'/>"));
         var vue = __createVue(elementPath, opts);
         vue.methods.saveFormData=function(data, callback){
-            opts.saveFormData(data, callback);
+            opts.onSavingData(data, callback);
         }
-        new Vue(vue);
+
+        var v= new Vue(vue);
+        if(schema)v.schema = schema;
+        if(data) v.data = data;
+        return{
+            setSchema:function(schema){
+                v.schema = schema; 
+                return this;             
+            },
+            setData:function(data){
+                v.data = data;  
+                return this;            
+            },
+            getData:function(){
+                return v.data;              
+            }
+        }
+
+
     }
 }
 

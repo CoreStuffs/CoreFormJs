@@ -47,6 +47,7 @@ RegisterField({
 var textInput = {
     type: 'textField',
     display: 'Input field',
+    acceptedVariableTypes:['text','number'],
     sanitizeSchemaModel: function (model) {
         if (!model) model = {};
         if (!model.label) model.label = '';
@@ -97,7 +98,8 @@ var textInput = {
 };
 
 var passwordInput = extend(textInput, {
-    type: 'passwordField'
+    type: 'passwordField',
+    acceptedVariableTypes:['text']
 });
 
 //Lazy method for the password ;)
@@ -109,6 +111,7 @@ RegisterField(passwordInput);
 RegisterField({
     type: 'checkboxField',
     display: 'Decision field',
+    acceptedVariableTypes:['text','number'],
     sanitizeSchemaModel: function (model) {
         if (!model) model = {};
         if (!model.label) model.label = '';
@@ -173,6 +176,7 @@ RegisterField({
 RegisterField({
     type: 'richtextField',
     display: 'Richtext Field',
+    acceptedVariableTypes:['richtext'],
     sanitizeSchemaModel: function (model) {
         if (!model) model = {};
         if (!model.label) model.label = '';
@@ -303,6 +307,7 @@ RegisterField({
 RegisterField({
     type: 'datetimeField',
     display: 'DateTime Field',
+    acceptedVariableTypes:['datetime','datetimerange'],
     sanitizeSchemaModel: function (model) {
         if (!model) model = {};
         if (!model.label) model.label = '';
@@ -433,6 +438,7 @@ RegisterField({
 RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
+    acceptedVariableTypes:['text','number','array'],
     sanitizeSchemaModel: function (model) {
         if (!model) model = {};
         if (!model.label) model.label = '';
@@ -447,7 +453,7 @@ RegisterField({
         template:
                 `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label>
                 <div class="uk-form-control bt-select-field" v-bind:class="{'uk-form-danger': this.$error}">
-                    <select @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
+                    <select style="width:100%" @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
                     </select>
                 </div>
                 <div class="error-message">{{this.$errorMessage}}</div>

@@ -15,7 +15,16 @@
                         <li>
                             <div class="uk-margin-small-bottom">
                                 <label for="txtValue" class="uk-form-label">Variable name</label>
-                                <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable.name" v-bind:class="{'uk-form-danger': $v.$error}"/>
+                                <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable.name" v-bind:class="{'uk-form-danger': $v.variable.name.$error}"/>
+                            </div>
+                            <div class="uk-margin-small-bottom">
+                                <label for="selType" class="uk-form-label">Variable type</label>
+                                <select v-if="(srcName==='')" name="selType" class="uk-select uk-form-small uk-width-expand@m" v-model="variable.type" v-bind:class="{'uk-form-danger': $v.variable.type.$error}">
+                                    <option v-for="(text, key) in acceptedVariablesTypes" v-bind:value="key">
+                                        {{ text }}
+                                    </option>
+                                </select>
+                                <span v-if="(srcName!=='')" >{{variableType(variable.type)}}</span>
                             </div>
                         </li>
                         <li>
@@ -36,7 +45,8 @@
             editformFieldId: Date.now(),
             variable: {},
             callback: function (obj) { },
-            srcName:''
+            srcName:'',
+            acceptedVariablesTypes:{}
         };
     },
     validations:function(){
@@ -49,6 +59,9 @@
                     'unique': (value) => (
                         this.$root.$form.schema.variables.filter(o=>o.name.toLowerCase()==value.toLowerCase()).length === (this.srcName.toLowerCase()!==value.toLowerCase()?0:1) 
                         )
+                },
+                type:{
+                    'required':window.validators.required
                 }
             }
         }
@@ -69,16 +82,27 @@
         }
     },
     methods: {
+        variableType:function(name){
+            return this.$root.variableType(name);
+        },
         changeValue: function (evt) {
             this.$emit('input', evt.srcElement.value)
         },
-        show: function (variable, callback) {
+        show: function (variable, acceptedTypes, callback) {
             if(!variable) variable = {name:'', validations:[{type:'required'}]};
             this.editformFieldId = Date.now();
             this.srcName = variable.name;
             this.variable = extend(variable);
             this.callback = callback;
-
+           
+            this.acceptedVariablesTypes={};
+            for (const varid in this.$root.variableTypes){
+                if(!acceptedTypes || acceptedTypes.filter(n=>n.toLowerCase()===varid.toLowerCase()).length===1){
+                    this.acceptedVariablesTypes[varid]=this.$root.variableTypes[varid];
+                }
+            };
+            if(Object.keys(this.acceptedVariablesTypes).length===1) this.variable.type=Object.keys(this.acceptedVariablesTypes)[0];
+            
             UIkit.modal(document.getElementById(this.editformId)).show();
         },
 

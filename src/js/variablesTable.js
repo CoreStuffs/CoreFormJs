@@ -4,6 +4,7 @@ Vue.component('cf_variableTable', {
         <thead>
             <tr>
                 <th class="uk-table-small">Name</th>
+                <th >Type</th>
                 <th >Required</th>
                 <th class="uk-table-shrink">Actions</th>
             </tr>
@@ -12,6 +13,9 @@ Vue.component('cf_variableTable', {
             <tr v-for="variable in variables">
                 <td class="uk-text-nowrap">
                     {{variable.name}}
+                </td>
+                <td class="uk-text-nowrap">
+                    {{variableType(variable.type)}}
                 </td>
                 <td class="uk-text-nowrap">
                     <span :v-if="variable.validations.filter(o=>o.type.toLowerCase()==='required').length>0" uk-icon="check"></span>
@@ -23,7 +27,7 @@ Vue.component('cf_variableTable', {
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3">
+                <td colspan="4">
                     <button class="uk-button uk-button-default uk-button-small" @click="addVariable()">Add</button>
                 </td>
             </tr>
@@ -34,6 +38,9 @@ data: function () {
     return { };
 },
 methods:{
+    variableType:function(name){
+        return this.$root.variableType(name);
+    },
     addVariable:function(){
         this.$parent.openVariableSettings();
     },

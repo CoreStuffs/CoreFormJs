@@ -94,9 +94,44 @@
             }
         ];
 
+
+
+
+
+        var schema = {
+  "schemaVersion": 1,
+  "formVersion": 0,
+  "name": "FirstSchema",
+  "title": "My first schema",
+  "fields": [
+    {
+      "label": "country",
+      "variable": "test",
+      "placeholder": "",
+      "minimumInputLength": 3,
+      "sourceId": "countries",
+      "multiple": false,
+      "id": "ctrl_1",
+      "type": "selectField"
+    }
+  ],
+  "variables": [
+    {
+      "name": "test",
+      "validations": [
+        {
+          "type": "required"
+        }
+      ],
+      "type": "text"
+    }
+  ]
+};
+
+
         $(document).ready(function () {
             coreform.formBuilder("#app", {
-                saveFormSchema : function(schema, callback){
+                onSavingSchema : function(schema, callback){
                     alert(JSON.stringify(schema));
                 },
                 getExternalDataSources: function(callback) {
@@ -133,7 +168,7 @@
                     }
                 }
 
-            });
+            }).setSchema(schema);
         });
     </script>
 

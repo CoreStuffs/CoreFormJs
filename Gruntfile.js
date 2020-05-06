@@ -31,7 +31,7 @@ module.exports = function (grunt) {
         'terser': {
             js: {
                 files: {
-                    './dist/coreform.builder.js': [
+                    './dist/coreform.builder.min.js': [
                         "./src/js/uikit.js",
                         "./src/js/uikit-icons.js",
                         "./src/js/vuelidate.min.js",
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                         "./src/js/variablesTable.js",
                         "./src/js/script_builder.js"
                     ],
-                    './dist/coreform.renderer.js': [
+                    './dist/coreform.renderer.min.js': [
                         "./src/js/uikit.js",
                         "./src/js/uikit-icons.js",
                         "./src/js/vuelidate.min.js",

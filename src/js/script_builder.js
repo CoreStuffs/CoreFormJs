@@ -153,7 +153,7 @@ Vue.component('v-formbuilder', {
             this.openSettingsByObject(obj);
 
         },
-        openVariableSettings: function (variable, callback) {
+        openVariableSettings: function (variable, acceptedTypes, callback) {
             var vari;
             if(variable){
                 vari = variable;
@@ -164,7 +164,7 @@ Vue.component('v-formbuilder', {
                 };
             }
 
-            this.$refs.editVariableModal.show(vari, function (model) {
+            this.$refs.editVariableModal.show(vari, acceptedTypes , function (model) {
                 Object.assign(vari, model);
                 if (callback) callback(vari);
             });
