@@ -1,6 +1,6 @@
 ﻿Vue.component('cf_editfieldmodal', {
     template: `<div :ref="editformId" :id="editformId" class="uk-flex-top" uk-modal v-cloak>
-        <div class="uk-modal-dialog uk-margin-auto-vertical ">
+        <div style="transition: none;" class="uk-modal-dialog uk-transition-fade uk-margin-auto-vertical ">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <!--<div class="uk-modal-header">
                 <h2 class="uk-modal-title">Settings</h2>
@@ -16,11 +16,14 @@
                             <div v-if="isDataField" class="uk-margin-small-bottom">
                                 <label for="txtValue" class="uk-form-label">Variable name</label>
                                 <!--<input id="txtValue" type="text" class="uk-input uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}"/>-->
-                                <select class="uk-select uk-form-small" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}">
-                                    <option v-for="option in this.$root.schema.variables" v-bind:value="option.name">
-                                        {{ option.name }}
-                                    </option>
-                                </select>
+                                <div class="uk-grid-column-collapse" uk-grid>
+                                    <select class="uk-select uk-form-small uk-width-expand@m" v-model="field.variable" v-bind:class="{'uk-form-danger': $v.field.variable.$error}">
+                                        <option v-for="option in this.$root.schema.variables" v-bind:value="option.name">
+                                            {{ option.name }}
+                                        </option>
+                                    </select>
+                                    <a href="#" @click="addVariable()" class="uk-width-auto@m" style="margin-left:5px;margin-top:5px" uk-icon="icon: plus-circle"></a>
+                                </div>
                             </div>
                             <component :key="editformFieldId" :is="(field ? fieldType(field) : null)" v-bind="field" v-model="field"></component>
                         </li>
@@ -112,7 +115,13 @@
 
             UIkit.modal(document.getElementById(this.editformId)).show();
         },
-
+        addVariable:function(){
+            var t = this;
+            this.$parent.openVariableSettings(null, function(vari){
+                t.field.variable = vari.name;
+                UIkit.modal(document.getElementById(t.editformId)).show();
+            });
+        },
         applyEdit: function () {
             this.$v.$touch();
             if (!this.$v.$error) {

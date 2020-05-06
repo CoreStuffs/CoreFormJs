@@ -35,7 +35,7 @@ data: function () {
 },
 methods:{
     addVariable:function(){
-        this.variables.push({name:'',validations:[]});
+        this.$parent.openVariableSettings();
     },
     changeRequired:function(e,v){
         if(e.srcElement.checked){

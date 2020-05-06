@@ -57,7 +57,7 @@ Vue.component('v-formbuilder', {
                                             <cf_variableTable :variables="schema.variables"/>
                                         </li>
                                         <li>
-                                            <div id="formContainer" data-ref="root" class="nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
+                                            <div id="formContainer" data-ref="root" class="uk-text-light nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
                                                 <component v-for="field in schema.fields"
                                                             :key="field.id"
                                                             :is="field.type"
@@ -87,6 +87,7 @@ Vue.component('v-formbuilder', {
                         </div>
                     </div>
                     <cf_editfieldmodal ref="editFormModal" />
+                    <cf_editvariablemodal ref="editVariableModal" />
                 </div>`,
     data: function () {
         return this.$parent;
@@ -146,6 +147,24 @@ Vue.component('v-formbuilder', {
             this.openSettingsByObject(obj);
 
         },
+        openVariableSettings: function (variable, callback) {
+            var vari;
+            if(variable){
+                vari = variable;
+            }else{
+                vari = {
+                    name : '',
+                    validations:[]
+                };
+            }
+
+            this.$refs.editVariableModal.show(vari, function (model) {
+                Object.assign(vari, model);
+                if (callback) callback(vari);
+            });
+
+        },
+
         removeNodeById: function (id) {
             var schema = this.schema;
             var app = this;
