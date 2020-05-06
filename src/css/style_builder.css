@@ -14,13 +14,31 @@ div[type="grid"] > .uk-grid:hover > * {
     border: 1px dotted silver
 }
 
+#mnuComponents{
+    padding-bottom:20px
+}
+
+#mnuComponents .draggable{
+    border:1px solid transparent;
+    font-size:12px;
+    padding-top:3px;
+    padding-bottom:3px;
+    cursor:grab;
+    margin-top: 3px;
+}
+
+#mnuComponents .draggable:hover{
+    border:1px dashed gray 
+}
+
 
 .sortable-ghost {
     border: 1px dashed gray !important;
 }
 
 .sortable-dragitem {
-    border: 1px dashed gray !important
+    border: 1px dashed gray !important;
+    font-size:14px
 }
 
 .sortable-item {

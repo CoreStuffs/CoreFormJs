@@ -68,7 +68,7 @@
             this.$emit('input', evt.srcElement.value)
         },
         show: function (variable, callback) {
-
+            if(!variable) variable = {name:'', validations:[{type:'required'}]};
             this.editformFieldId = Date.now();
             this.srcName = variable.name;
             this.variable = extend(variable);

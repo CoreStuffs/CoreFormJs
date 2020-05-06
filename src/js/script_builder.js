@@ -3,75 +3,84 @@
 
 Vue.component('v-formbuilder', {
     template: `<div class="cs-cf" v-cloak>
-                    <div class="uk-grid-small uk-grid-divider" uk-grid>
-                        <div class="uk-width-1-5@m">
-                            <div>
-                                <div>
-                                    <label class="uk-form-label" for="formName">Name:</label>
-                                    <input id="formName" class="uk-input uk-form-small" v-model="schema.name" />
-                                </div>
-                                <div>
-                                    <label class="uk-form-label" for="formTitle">Title:</label>
-                                    <input id="formTitle" class="uk-input uk-form-small" v-model="schema.title" />
-                                </div>
-                            </div>
-
-                            <div id="mnuComponents" style="margin-bottom:1em;margin-top:1em;">
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="textField" @click="addTxt()">
-                                 Text input
-                                </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="passwordField">
-                                    Password input
-                                </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="checkboxField">
-                                    Decision
-                                </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="richtextField">
-                                    Richtext Field
-                                </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="datetimeField">
-                                    Date & Time Field
-                                </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="selectField">
-                                    Selector
-                                </a>
-                                <a class="uk-button uk-button-default uk-button-small uk-width-1-1" data-type="grid" @click="addGrid()">
-                                    Columns
-                                </a>
-                            </div>
-                            <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
-
-                        </div>
-                        <div class="uk-width-3-5@m">
-                            
+                    <div class="uk-card uk-card-default uk-card-body">
                             <fieldset class="uk-fieldset">
-                                <div class="uk-card uk-card-default uk-card-body">
-                                    <h3 class="uk-card-title">{{schema.title}}</h3>
+                                <h3 class="uk-card-title">{{schema.title}}</h3>
+                                <small>version {{schema.formVersion}}</small>
 
-                                    <ul uk-tab>
-                                        <li><a href="#">Data model</a></li>
-                                        <li><a href="#">Form designer</a></li>
-                                    </ul>
-                                    <ul class="uk-switcher">
-                                        <li>
-                                            <cf_variableTable :variables="schema.variables"/>
-                                        </li>
-                                        <li>
-                                            <div id="formContainer" data-ref="root" class="uk-text-light nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
-                                                <component v-for="field in schema.fields"
-                                                            :key="field.id"
-                                                            :is="field.type"
-                                                            :schema="field"
-                                                            v-bind="field"
-                                                            v-model="data[field.variable]">
-                                                </component>
+                                <ul uk-tab>
+                                    <li><a href="#">Identification</a></li>
+                                    <li><a href="#">Form designer</a></li>
+                                    <li><a href="#">Data model</a></li>
+                                </ul>
+                                <ul class="uk-switcher">
+                                    <li>
+                                        <div id="formContainer" data-ref="root" class="uk-text-light uk-form-stacked">
+                                            <div>
+                                                <label class="uk-form-label" for="formName">Name:</label>
+                                                <input id="formName" class="uk-input uk-form-small" v-model="schema.name" />
                                             </div>
-                                        </li>
-                                    </ul>
-                                    <small>version {{schema.formVersion}}</small>
-                                </div>
-                            </fieldset>
+                                            <div>
+                                                <label class="uk-form-label" for="formTitle">Title:</label>
+                                                <input id="formTitle" class="uk-input uk-form-small" v-model="schema.title" />
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="uk-grid-collapse" uk-grid>
+                                            <div class="uk-width-expand@s">
+                                                <div id="formContainer" data-ref="root" class="uk-text-light nested-sortable uk-form-stacked" style="padding:10px;min-height:60px">
+                                                    <component v-for="field in schema.fields"
+                                                                :key="field.id"
+                                                                :is="field.type"
+                                                                :schema="field"
+                                                                v-bind="field"
+                                                                v-model="data[field.variable]">
+                                                    </component>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-1-5@s">
+                                                <div id="mnuComponents" class="uk-sticky uk-active uk-sticky-bottom uk-sticky-fixed"  uk-sticky="bottom: 10000">
+                                                        <div class="draggable" data-type="textField"">
+                                                            <span uk-icon="tag"></span>
+                                                            Text input
+                                                        </div>
+                                                        <div class="draggable" data-type="passwordField">
+                                                            <span uk-icon="tag"></span>                                                        
+                                                            Password input
+                                                        </div>
+                                                        <div class="draggable" data-type="checkboxField">
+                                                            <span uk-icon="tag"></span>                                                                                                                
+                                                            Decision
+                                                        </div>
+                                                        <div class="draggable" data-type="richtextField">
+                                                            <span uk-icon="tag"></span>                                                        
+                                                            Richtext Field
+                                                        </div>
+                                                        <div class="draggable" data-type="datetimeField">
+                                                            <span uk-icon="tag"></span>                                                                                                                
+                                                            Date & Time Field
+                                                        </div>
+                                                        <div class="draggable" data-type="selectField">
+                                                            <span uk-icon="tag"></span>                                                                                                                
+                                                            List selector
+                                                        </div>
+                                                        <div class="draggable" data-type="grid">
+                                                            <span uk-icon="tag"></span>                                                                                                                
+                                                            Columns
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <cf_variableTable :variables="schema.variables"/>
+                                    </li>
+                                </ul>
+                                
      
+                                <button class="uk-button uk-button-primary uk-button-small uk-width-1-1" @click="saveSchema()">Save</button>
+                            </fieldset>
 
                             <ul uk-accordion="multiple: true">
                                 <li>
@@ -83,8 +92,6 @@ Vue.component('v-formbuilder', {
                                     <div class="uk-accordion-content"><pre><code>{{ data }}</code></pre></div>
                                 </li>
                             </ul>
-
-                        </div>
                     </div>
                     <cf_editfieldmodal ref="editFormModal" />
                     <cf_editvariablemodal ref="editVariableModal" />
@@ -154,7 +161,7 @@ Vue.component('v-formbuilder', {
             }else{
                 vari = {
                     name : '',
-                    validations:[]
+                    validations:[{type:'required'}]
                 };
             }
 
@@ -211,10 +218,11 @@ Vue.component('v-formbuilder', {
                         var elName;
                         if (evt.pullMode === "clone") {
                             var item = $(evt.item);
+                            var type = item.data("type");
                             var newId = 'ctrl_' + _parent.getNextId(_parent.schema);
-                            var model = registeredFields.get(item.data("type")).sanitizeSchemaModel(null, newId);
+                            var model = registeredFields.get(type).sanitizeSchemaModel(null, newId);
                             model.id = newId
-                            model.type = item.data("type")
+                            model.type = type
 
                             var newIndex = evt.newDraggableIndex;
                             var collTo = _parent.findNodeCollectionByDomElement($(evt.to), _parent.schema);
@@ -416,7 +424,7 @@ Vue.component('v-formbuilder', {
                     pull: 'clone', // To clone: set pull to 'clone'
                     put: false
                 },
-                draggale: '.uk-button',
+                draggale: '.draggable',
                 animation: 0,
                 fallbackOnBody: true,
                 sort: false,

@@ -1,23 +1,23 @@
 Vue.component('cf_variableTable', {
     template:`<div class="uk-overflow-auto">
-    <table class="uk-table uk-table-middle uk-table-divider  uk-table-small">
+    <table class="uk-table uk-table-middle uk-table-divider uk-table-small">
         <thead>
             <tr>
-                <th >Name</th>
+                <th class="uk-table-small">Name</th>
                 <th >Required</th>
-                <th >Validations</th>
+                <th class="uk-table-shrink">Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="variable in variables">
                 <td class="uk-text-nowrap">
-                    <input type="text" class="uk-input uk-form-small" v-model="variable.name"/>
+                    {{variable.name}}
                 </td>
                 <td class="uk-text-nowrap">
-                    <input type="checkbox" class="uk-checkbox" @change="changeRequired($event,variable)"/>
+                    <span :v-if="variable.validations.filter(o=>o.type.toLowerCase()==='required').length>0" uk-icon="check"></span>
                 </td>
                 <td class="uk-text-nowrap">
-                    <a href="#" uk-icon="icon: plus-circle"></a>                    
+                    <a href="" uk-icon="icon: pencil"></a>
                 </td>
             </tr>
         </tbody>
