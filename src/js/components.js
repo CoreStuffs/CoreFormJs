@@ -453,13 +453,15 @@ RegisterField({
         template:
                 `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label>
                 <div class="uk-form-control bt-select-field" v-bind:class="{'uk-form-danger': this.$error}">
-                    <select style="width:100%" @change="changeValue" class="bt-select-field no-autoinit uk-select" v-model="schema.id" :id="schema.id" :name="schema.id">
+                    <select style="width:100%" @change="changeValue" class="bt-select-field no-autoinit uk-select" :id="schema.id" :name="schema.id">
                     </select>
                 </div>
                 <div class="error-message">{{this.$errorMessage}}</div>
             </cf_field>`,
         data: function () {
-            return {}
+            return {
+                select2:null
+            }
         },
         computed: {
         },
@@ -535,7 +537,7 @@ RegisterField({
                 }
 
 
-                    var sel2 = el.select2({
+                    vm.select2 = el.select2({
                         dropdownParent: $("#___formapp___"),
                         dataAdapter: RefAdapter,
                         placeholder: vm.schema.placeholder,
@@ -551,31 +553,35 @@ RegisterField({
                             val = [];
                             for (let index = 0; index < this.selectedOptions.length; index++) {
                                 const option = this.selectedOptions[index];
-                                val.push({key : option.value, value : option.text});
+                                val.push({id : option.value, text : option.text});
                             }
                         }else{
                             if(this.selectedOptions.length>0){
                                 var option = this.selectedOptions[0];
-                                val = {key : option.value, value : option.text};
+                                val = {id : option.value, text : option.text};
                             }
                         }
                         vm.$emit("input", val);
                     });
+                    if(vm.value){
+                        if(Array.isArray(vm.value)){
+                            vm.value.forEach(data=>{
+                                var option = new Option(data.text, data.id, true, true);
+                                vm.select2.append(option);
+                            });
+                        }else{
+                            var data = vm.value;
+                            var option = new Option(data.text, data.id, true, true);
+                            vm.select2.append(option);
+                        }
+                    }
 
-                    var data = {
-                        id : 'BEL',
-                        full_name : 'Belgique'
-                    };
-
-                    var option = new Option(data.full_name, data.id, true, true);
-               
-                    sel2.append(option).trigger('change');
                 
-                    // manually trigger the `select2:select` event
-                    sel2.trigger({
+                    //manually trigger the `select2:select` event
+                    vm.select2.trigger({
                         type: 'select2:select',
                         params: {
-                            data: data
+                            data: vm.value
                         }
                     });
 
@@ -587,10 +593,40 @@ RegisterField({
         },
         watch: {
             value: function (value) {
-                // update value
-                $(this.$el)
-                    .val(value)
-                    .trigger("change");
+                if(Array.isArray(value)){
+                    this.select2[0].options.length=0;
+                    value.forEach(data=>{
+                        var option = new Option(data.text, data.id, true, true);
+                        this.select2.append(option);
+                    });
+                }else{
+                    var data = value;
+                    var option = new Option(data.text, data.id, true, true);
+                    this.select2.append(option);
+                }
+                this.select2.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: value
+                    }
+                });
+            
+
+                // var option = new Option(data.full_name, data.id, true, true);
+               
+                //     sel2.append(option).trigger('change');
+                
+                //     // manually trigger the `select2:select` event
+                //     sel2.trigger({
+                //         type: 'select2:select',
+                //         params: {
+                //             data: data
+                //         }
+                //     });
+
+                // $(this.$el)
+                //     .val(value)
+                //     .trigger("change");
             }
         },
         destroyed: function () {

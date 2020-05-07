@@ -54,32 +54,42 @@
     </div>
     <script>
       
-        var schema = {
+var schema = {
   "schemaVersion": 1,
   "formVersion": 0,
   "name": "FirstSchema",
   "title": "My first schema",
   "fields": [
     {
-      "label": "country",
-      "variable": "test",
+      "label": "Countries 1",
+      "variable": "countries",
       "placeholder": "",
       "minimumInputLength": 3,
       "sourceId": "countries",
-      "multiple": false,
+      "multiple": true,
       "id": "ctrl_1",
+      "type": "selectField"
+    },
+    {
+      "label": "Countries 2",
+      "variable": "countries",
+      "placeholder": "",
+      "minimumInputLength": 3,
+      "sourceId": "countries",
+      "multiple": true,
+      "id": "ctrl_2",
       "type": "selectField"
     }
   ],
   "variables": [
     {
-      "name": "test",
+      "name": "countries",
       "validations": [
         {
           "type": "required"
         }
       ],
-      "type": "text"
+      "type": "listitemarray"
     }
   ]
 };
