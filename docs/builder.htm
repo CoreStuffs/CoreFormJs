@@ -14,7 +14,7 @@
         <div id="app"></div>
     </div>
 
-    <script>
+<script>
         $(document).ready(function () {
             coreform.formBuilder("#app", {
                 onSavingSchema : function(schema, callback){
@@ -25,8 +25,105 @@
             }).setSchema(schema);
         });
         
-        
-        
+var schema = {
+  "schemaVersion": 1,
+  "formVersion": 0,
+  "name": "article",
+  "title": "New article",
+  "fields": [
+    {
+      "label": "Title",
+      "variable": "title",
+      "placeholder": "The article title",
+      "id": "ctrl_1",
+      "type": "textField"
+    },
+    {
+      "showSeparator": true,
+      "columns": [
+        {
+          "id": "col_ctrl_4_1",
+          "width": "1-2",
+          "fields": [
+            {
+              "label": "Publishing date",
+              "variable": "publishingPeriod",
+              "placeholder": "The period of appearance",
+              "timePicker": false,
+              "rangePicker": true,
+              "id": "ctrl_2",
+              "type": "datetimeField"
+            }
+          ]
+        },
+        {
+          "id": "col_ctrl_4_2",
+          "width": "1-2",
+          "fields": [
+            {
+              "label": "Publishing countries",
+              "variable": "countries",
+              "placeholder": "",
+              "minimumInputLength": 3,
+              "sourceId": "countries",
+              "multiple": true,
+              "id": "ctrl_5",
+              "type": "selectField"
+            }
+          ]
+        }
+      ],
+      "id": "ctrl_4",
+      "type": "grid",
+      "width": 12
+    },
+    {
+      "label": "Article",
+      "variable": "article",
+      "placeholder": "",
+      "id": "ctrl_3",
+      "type": "richtextField"
+    }
+  ],
+  "variables": [
+    {
+      "name": "countries",
+      "validations": [
+        {
+          "type": "required"
+        }
+      ],
+      "type": "listitemarray"
+    },
+    {
+      "name": "article",
+      "validations": [
+        {
+          "type": "required"
+        }
+      ],
+      "type": "richtext"
+    },
+    {
+      "name": "title",
+      "validations": [
+        {
+          "type": "required"
+        }
+      ],
+      "type": "text"
+    },
+    {
+      "name": "publishingPeriod",
+      "validations": [
+        {
+          "type": "required"
+        }
+      ],
+      "type": "datetimerange"
+    }
+  ]
+}
         
         
         
