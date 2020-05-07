@@ -1,6 +1,6 @@
 {
   "name": "coreform-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CoreFormJs",
   "main": "Builder.htm",
   "author": {
@@ -20,7 +20,7 @@
   "files": [
     "dist/coreform.builder.min.js",
     "dist/coreform.builder.min.css",
-    "dist/coreform.remderer.min.js",
+    "dist/coreform.renderer.min.js",
     "dist/coreform.renderer.min.css"
   ]
 }
