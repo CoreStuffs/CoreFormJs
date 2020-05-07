@@ -15,16 +15,6 @@
     </div>
 
 <script>
-        $(document).ready(function () {
-            coreform.formBuilder("#app", {
-                onSavingSchema : function(schema, callback){
-                    alert(JSON.stringify(schema));
-                },
-                dataAdapter : customDataAdapter
-
-            }).setSchema(schema);
-        });
-        
 var schema = {
   "schemaVersion": 1,
   "formVersion": 0,
@@ -124,12 +114,25 @@ var schema = {
     }
   ]
 }
+            
+    
+    
+    
+        $(document).ready(function () {
+            coreform.formBuilder("#app", {
+                onSavingSchema : function(schema, callback){
+                    alert(JSON.stringify(schema));
+                },
+                dataAdapter : customDataAdapter
+
+            }).setSchema(schema);
+        });
+        
+
         
         
         
-        
-        
-        var dataSources = [
+var dataSources = [
     {
         //common/mandatory part
        id:'countries',
