@@ -146,7 +146,8 @@ var __createVue = function(elementPath, opts){
                     'richtext':'Rich content',
                     'datetime':'Date and time',
                     'datetimerange':'Date and time range',
-                    'array':'Multiple values'
+                    'listitemarray':'Multiple selection items',
+                    'listitem':'Selection item'
                 };
             }
         },
@@ -154,11 +155,14 @@ var __createVue = function(elementPath, opts){
             variableType:function(name){
                 return this.variableTypes[name];
             },
+            getExternalDataItem : function (sourceid, itemid, onSuccess, query) {
+                if(opts.dataAdapter && opts.dataAdapter.getDataItem) opts.dataAdapter.getDataItem(id, onSuccess, query);
+            },
             getExternalData : function (id, onSuccess, query) {
-                opts.getExternalData(id, onSuccess, query);
+                if(opts.dataAdapter && opts.dataAdapter.getData) opts.dataAdapter.getData(id, onSuccess, query);
             },
             getExternalDataSources : function (onSuccess) {
-                opts.getExternalDataSources(onSuccess);
+                if(opts.dataAdapter && opts.dataAdapter.getDataSources) opts.dataAdapter.getDataSources(onSuccess);
             },
             getExternalDataSource: function(id){
                 for (let index = 0; index < this.datasources.length; index++) {
@@ -170,7 +174,7 @@ var __createVue = function(elementPath, opts){
         },
         mounted:function(){
             var t = this;
-            opts.getExternalDataSources(function(data){
+            this.getExternalDataSources(function(data){
                 t.datasources = data;
             });
         }

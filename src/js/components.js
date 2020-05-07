@@ -438,7 +438,7 @@ RegisterField({
 RegisterField({
     type: 'selectField',
     display: 'Dropdown select',
-    acceptedVariableTypes:['text','number','array'],
+    acceptedVariableTypes:['listitem','listitemarray'],
     sanitizeSchemaModel: function (model) {
         if (!model) model = {};
         if (!model.label) model.label = '';
@@ -535,7 +535,7 @@ RegisterField({
                 }
 
 
-                    el.select2({
+                    var sel2 = el.select2({
                         dropdownParent: $("#___formapp___"),
                         dataAdapter: RefAdapter,
                         placeholder: vm.schema.placeholder,
@@ -543,11 +543,43 @@ RegisterField({
                         multiple: vm.schema.multiple,
                         loadMode : 'always'
                     }) 
-                    .val(this.value)
+                    .val(vm.value)
                     .trigger("change")                    
                     .on("change", function (a,b,c) {
-                        vm.$emit("input", $(this).val());
+                        var val = null;    
+                        if(this.multiple){
+                            val = [];
+                            for (let index = 0; index < this.selectedOptions.length; index++) {
+                                const option = this.selectedOptions[index];
+                                val.push({key : option.value, value : option.text});
+                            }
+                        }else{
+                            if(this.selectedOptions.length>0){
+                                var option = this.selectedOptions[0];
+                                val = {key : option.value, value : option.text};
+                            }
+                        }
+                        vm.$emit("input", val);
                     });
+
+                    var data = {
+                        id : 'BEL',
+                        full_name : 'Belgique'
+                    };
+
+                    var option = new Option(data.full_name, data.id, true, true);
+               
+                    sel2.append(option).trigger('change');
+                
+                    // manually trigger the `select2:select` event
+                    sel2.trigger({
+                        type: 'select2:select',
+                        params: {
+                            data: data
+                        }
+                    });
+
+
                 });
                
             
