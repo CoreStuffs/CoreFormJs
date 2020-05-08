@@ -11,16 +11,16 @@ Vue.component('cf_variableTable', {
         </thead>
         <tbody>
             <tr v-for="variable in variables">
-                <td class="uk-text-nowrap">
+                <td class="uk-text-nowrap uk-text-small">
                     {{variable.name}}
                 </td>
-                <td class="uk-text-nowrap">
+                <td class="uk-text-nowrap uk-text-small">
                     {{variableType(variable.type)}}
                 </td>
-                <td class="uk-text-nowrap">
+                <td class="uk-text-nowrap uk-text-small">
                     <span :v-if="variable.validations.filter(o=>o.type.toLowerCase()==='required').length>0" uk-icon="check"></span>
                 </td>
-                <td class="uk-text-nowrap">
+                <td class="uk-text-nowrap uk-text-small">
                     <a @click="editVariable(variable)" uk-icon="icon: pencil"></a>
                 </td>
             </tr>

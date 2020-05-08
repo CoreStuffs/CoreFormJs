@@ -320,7 +320,8 @@ RegisterField({
     fieldTemplate: {
         template: `<cf_field :schema="schema"><label :for="schema.id" class="uk-form-label">{{ schema.label }} <div class="required-tag" v-if="$isrequired"/></label><div class="uk-form-controls"><input type="text" v-bind:class="{'uk-form-danger': this.$error}" :placeholder="schema.placeholder" class="uk-input uk-form-small" ref="dtCtrl" :id="schema.id" :value="formattedValue" ></div><div class="error-message">{{this.$errorMessage}}&nbsp;</div></cf_field>`,
         data: function () {
-            return {};
+            return {
+            };
         },
         validations: {
             'label': {
@@ -355,6 +356,7 @@ RegisterField({
                     singleDatePicker: !this.schema.rangePicker,
                     timePicker: this.schema.timePicker,
                     timePicker24Hour: true,
+                    parentEl : "#" + this.schema.id,
                     autoApply: true,
                     locale: {
                         format: 'l LT',
@@ -389,7 +391,11 @@ RegisterField({
                     $(this.$refs.dtCtrl).data('daterangepicker').setEndDate(this.value.end);
                 }
             }
-            this.$watch('schema', this.build, { deep: true });
+            this.$watch('schema',
+                    Vue.nextTick(function () {
+                        this.build;
+                    }), 
+                    { deep: true });
         },
         watch: {
             value: function (newValue, oldValue) {
