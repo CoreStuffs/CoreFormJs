@@ -16,11 +16,14 @@
     "grunt-terser": "^1.0.0",
     "node-sass": "^4.14.0"
   },
-  "unpkg": "dist/coreform.builder.js",
-  "files": [
-    "dist/coreform.builder.min.js",
-    "dist/coreform.builder.min.css",
-    "dist/coreform.renderer.min.js",
-    "dist/coreform.renderer.min.css"
-  ]
+  "files": {
+    "include": [
+      "dist",
+      "docs"
+    ]
+  },
+  "dependencies": {
+    "jquery": "^3.5.1",
+    "vue": "^2.6.11"
+  }
 }
