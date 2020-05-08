@@ -6,6 +6,11 @@
     margin-bottom: 2px;
 }
 
+.uk-form-horizontal .uk-form-controls{
+    padding-top:7px
+}
+
+
 .uk-grid-column-medium > *, .uk-grid-medium > *, .uk-grid-collapse > * {
     padding-left: 15px;
     padding-right: 15px;
@@ -35,6 +40,10 @@
 .uk-table th{
     font-size:12px
 }
+.uk-tab-error > a {
+    color:f0506e !important
+}
+
 
 ::-webkit-input-placeholder { /* Edge */
     color: #f0f0f0;

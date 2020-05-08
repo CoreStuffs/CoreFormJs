@@ -97,7 +97,7 @@
     },
     methods: {
         variableType:function(name){
-            return this.$root.variableType(name);
+            return this.$root.variableTypeText(name);
         },
         fieldType: function(field){
             if(!field || !field.type){

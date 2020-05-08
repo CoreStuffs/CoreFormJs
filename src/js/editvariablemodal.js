@@ -5,27 +5,39 @@
             <!--<div class="uk-modal-header">
                 <h2 class="uk-modal-title">Variable</h2>
             </div>-->
-            <div class="uk-modal-body uk-form-stacked" id="editFormBody">
+            <div class="uk-modal-body uk-text-small" id="editFormBody">
                 <div>
                     <ul uk-tab>
-                        <li><a href="#">Basic</a></li>
+                        <li v-bind:class="{'uk-tab-error': $v.$error}"><a href="#">Basic</a></li>
+                        <li><a href="#">Validations</a></li>
                         <li><a href="#">Debug</a></li>
                     </ul>
                     <ul class="uk-switcher uk-margin" uk-overflow-auto>
                         <li>
-                            <div class="uk-margin-small-bottom">
-                                <label for="txtValue" class="uk-form-label">Variable name</label>
-                                <input id="txtValue" type="text" class="uk-input uk-form-small" v-model="variable.name" v-bind:class="{'uk-form-danger': $v.variable.name.$error}"/>
+                            <div class="uk-form-horizontal uk-margin-large">
+                                <fieldset class="uk-fieldset">
+                                    <div class="uk-margin">
+                                        <label for="txtValue" class="uk-form-label">Variable name</label>
+                                        <div class="uk-form-controls">
+                                            <input id="txtValue" name="txtValue" type="text" class="uk-input uk-form-small" v-model="variable.name" v-bind:class="{'uk-form-danger': $v.variable.name.$error}"/>
+                                        </div>
+                                    </div>
+                                    <div class="uk-margin">
+                                        <label for="selType" class="uk-form-label">Variable type</label>
+                                        <div class="uk-form-controls uk-text-small">
+                                            <select v-if="(srcName==='')" name="selType" class="uk-select uk-form-small uk-width-expand@m" v-model="variable.type" v-bind:class="{'uk-form-danger': $v.variable.type.$error}">
+                                                <option v-for="(text, key) in acceptedVariablesTypes" v-bind:value="key">
+                                                    {{ text }}
+                                                </option>
+                                            </select>
+                                            <label v-if="(srcName!=='')" >{{variableType(variable.type)}}</label>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
-                            <div class="uk-margin-small-bottom">
-                                <label for="selType" class="uk-form-label">Variable type</label>
-                                <select v-if="(srcName==='')" name="selType" class="uk-select uk-form-small uk-width-expand@m" v-model="variable.type" v-bind:class="{'uk-form-danger': $v.variable.type.$error}">
-                                    <option v-for="(text, key) in acceptedVariablesTypes" v-bind:value="key">
-                                        {{ text }}
-                                    </option>
-                                </select>
-                                <span v-if="(srcName!=='')" >{{variableType(variable.type)}}</span>
-                            </div>
+                        </li>
+                        <li>
+                            <cf_validationtable :variable="variable"/>
                         </li>
                         <li>
                             <pre><code>{{variable}}</code></pre>
@@ -83,7 +95,7 @@
     },
     methods: {
         variableType:function(name){
-            return this.$root.variableType(name);
+            return this.$root.variableTypeText(name);
         },
         changeValue: function (evt) {
             this.$emit('input', evt.srcElement.value)
@@ -98,12 +110,21 @@
             this.acceptedVariablesTypes={};
             for (const varid in this.$root.variableTypes){
                 if(!acceptedTypes || acceptedTypes.filter(n=>n.toLowerCase()===varid.toLowerCase()).length===1){
-                    this.acceptedVariablesTypes[varid]=this.$root.variableTypes[varid];
+                    this.acceptedVariablesTypes[varid]=this.$root.variableTypes[varid].text;
                 }
             };
             if(Object.keys(this.acceptedVariablesTypes).length===1) this.variable.type=Object.keys(this.acceptedVariablesTypes)[0];
+            var modal = UIkit.modal(document.getElementById(this.editformId));
+            var t = this;
+            UIkit.util.on(document.getElementById(this.editformId), 'shown',
+                function (a,b) {
+                    if(b===modal) {
+                        UIkit.tab(document.getElementById(t.editformId).getElementsByClassName("uk-tab")[0]).show(0);
+                    } 
+                }
+            );
+            modal.show();
             
-            UIkit.modal(document.getElementById(this.editformId)).show();
         },
 
         applyEdit: function () {

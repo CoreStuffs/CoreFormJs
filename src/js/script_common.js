@@ -141,19 +141,41 @@ var __createVue = function(elementPath, opts){
             },
             variableTypes:function(){
                 return {
-                    'text':'String or Text',
-                    'number':'Numeric value',
-                    'richtext':'Rich content',
-                    'datetime':'Date and time',
-                    'datetimerange':'Date and time range',
-                    'listitemarray':'Multiple selection items',
-                    'listitem':'Selection item'
+                    'text':{
+                        text:'String or Text',
+                        optionalValidations:['required', 'minLength', 'maxLength', 'email']
+                    },
+                    'number':{
+                        text:'Numeric value',
+                        implicitValidations:['number'],
+                        optionalValidations:['required']
+                    },
+                    'richtext':{
+                        text:'Rich content',
+                        optionalValidations:['required']
+                    },
+                    'datetime':{
+                        text:'Date and time',
+                        optionalValidations:['required']
+                    },
+                    'datetimerange':{
+                        text:'Date and time range',
+                        optionalValidations:['required']
+                    },
+                    'listitemarray':{
+                        text:'Multiple selection items',
+                        optionalValidations:['required']
+                    },
+                    'listitem':{
+                        text:'Selection item',
+                        optionalValidations:['required']
+                    }
                 };
             }
         },
         methods: {
-            variableType:function(name){
-                return this.variableTypes[name];
+            variableTypeText:function(name){
+                return this.variableTypes[name].text;
             },
             getExternalDataItem : function (sourceid, itemid, onSuccess, query) {
                 if(opts.dataAdapter && opts.dataAdapter.getDataItem) opts.dataAdapter.getDataItem(id, onSuccess, query);
