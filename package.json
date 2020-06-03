@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "jquery": "^3.5.1",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-select": "^3.10.3"
   }
 }
